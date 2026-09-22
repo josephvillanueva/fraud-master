@@ -1,0 +1,1667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=ai-legible&utm_source=comment&utm_medium=referral&utm_id=893cf036-ba9b-4140-87aa-e448057ab263
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+<meta name="hosting-provider" content="Netlify">
+<meta name="netlify-deploy" content="https://netlify.new/?utm_campaign=ai-legible&amp;utm_source=meta&amp;utm_medium=referral&amp;utm_id=893cf036-ba9b-4140-87aa-e448057ab263">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Fraud Master</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+html,body{max-width:100%;overflow-x:hidden}
+:root{
+  --pm-primary:#2563EB;--pm-primary-hover:#1D4ED8;--pm-primary-subtle:#EFF6FF;
+  --pm-secondary:#7C3AED;
+  --pm-surface-base:#f6f7f9;--pm-surface-raised:#ffffff;
+  --pm-border-default:#dee2e6;--pm-border-subtle:#e9ecef;
+  --pm-text-primary:#1a1d20;--pm-text-secondary:#495057;--pm-text-muted:#94a3b8;
+  --pm-success:#10b981;--pm-warning:#f59e0b;--pm-danger:#dc3545;
+  --pm-radius-control:8px;--pm-radius-container:16px;
+  --pm-focus:color-mix(in srgb,#2563EB 35%,transparent);
+}
+*{box-sizing:border-box}
+body{font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--pm-surface-base);color:var(--pm-text-primary);margin:0}
+.text-muted2{color:var(--pm-text-muted)}
+.text-sec{color:var(--pm-text-secondary)}
+.tnum{font-variant-numeric:tabular-nums}
+a{color:var(--pm-primary)}
+:where(button,a,select,input,[tabindex]):focus-visible{outline:2px solid var(--pm-focus);outline-offset:2px;border-radius:6px}
+@media (prefers-reduced-motion: reduce){*{transition-duration:.01ms!important;animation-duration:.01ms!important;scroll-behavior:auto!important}}
+
+/* shell */
+.app{display:flex;min-height:100vh}
+.sidebar{width:216px;flex:0 0 216px;background:var(--pm-surface-raised);border-right:1px solid var(--pm-border-subtle);position:sticky;top:0;height:100vh;display:none;flex-direction:column}
+@media (min-width:992px){.sidebar{display:flex}}
+.content{flex:1;min-width:0;display:flex;flex-direction:column}
+.topbar{background:var(--pm-surface-raised);border-bottom:1px solid var(--pm-border-subtle);position:sticky;top:0;z-index:20}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;letter-spacing:-.01em}
+.brand .logo{height:32px;width:32px;border-radius:8px;background:var(--pm-primary);display:flex;align-items:center;justify-content:center;color:#fff}
+.navlabel{padding:0 8px 8px;font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.04em;color:var(--pm-text-muted)}
+.navitem{width:100%;display:flex;align-items:center;gap:12px;height:36px;padding:0 12px;border:none;background:none;border-radius:8px;font-size:14px;font-weight:500;color:var(--pm-text-secondary);cursor:pointer;text-align:left}
+.navitem:hover{background:#f1f5f9}
+.navitem.active{background:var(--pm-primary-subtle);color:#1E40AF}
+.navitem .ic{color:var(--pm-text-muted);display:flex}
+.navitem.active .ic{color:var(--pm-primary)}
+
+/* cards */
+.card2{background:var(--pm-surface-raised);border:1px solid var(--pm-border-subtle);border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.05);padding:20px}
+.card2 .card2-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.card2 .card2-title{font-size:14px;font-weight:600;color:#0f172a}
+
+/* buttons */
+.btnx{display:inline-flex;align-items:center;gap:8px;white-space:nowrap;border-radius:8px;padding:9px 14px;font-size:14px;font-weight:500;cursor:pointer;border:1px solid transparent;transition:background .12s,color .12s;line-height:1}
+.btn-brand{background:var(--pm-primary);color:#fff}
+.btn-brand:hover{background:var(--pm-primary-hover)}
+.btn-soft{background:#fff;border-color:var(--pm-border-default);color:#334155}
+.btn-soft:hover{background:#f8fafc}
+.key-on{background:#ecfdf5;border-color:#10b981;color:#047857}
+.key-on:hover{background:#d1fae5}
+.btn-ghost{background:none;color:var(--pm-text-secondary)}
+.btn-ghost:hover{background:#f1f5f9}
+.btnx:disabled{opacity:.45;cursor:default}
+
+/* chips + pills */
+.chip{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:500}
+.chip-slate{background:#f1f5f9;color:#475569}
+.chip-emerald{background:#ecfdf5;color:#047857}
+.chip-amber{background:#fffbeb;color:#b45309}
+.chip-violet{background:#f5f3ff;color:#6d28d9}
+.pill{display:inline-flex;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:500}
+.pill-on{background:#ecfdf5;color:#047857}.pill-off{background:#fffbeb;color:#b45309}.pill-ic{background:#ede9fe;color:#6d28d9}
+.daybadge{display:inline-flex;border-radius:999px;padding:2px 8px;font-size:12px;font-weight:500}
+
+/* icon chip */
+.ichip{display:inline-flex;align-items:center;justify-content:center;height:36px;width:36px;border-radius:12px}
+.ic-indigo{background:var(--pm-primary-subtle);color:var(--pm-primary)}
+.ic-amber{background:#fffbeb;color:#d97706}
+.ic-emerald{background:#ecfdf5;color:#059669}
+.ic-sky{background:#f0f9ff;color:#0284c7}
+
+/* kpi */
+.kpi .kpi-label{margin-top:16px;font-size:14px;color:#64748b}
+.kpi .kpi-value{margin-top:4px;font-size:26px;font-weight:600;letter-spacing:-.02em}
+.kpi .kpi-sub{margin-top:4px;font-size:12px;color:var(--pm-text-muted)}
+
+/* avatar */
+.avatar{display:inline-flex;align-items:center;justify-content:center;border-radius:8px;font-weight:600;flex:0 0 auto}
+
+/* segment bar */
+.seg{display:flex;gap:4px;height:16px;width:100%}
+.seg>span{border-radius:4px;min-width:4px;cursor:pointer;transition:opacity .12s}
+.seg:hover>span{opacity:.4}
+.seg>span:hover{opacity:1}
+#segtip{position:fixed;z-index:1000;background:#0f172a;color:#fff;font-size:12px;line-height:1.35;padding:6px 10px;border-radius:8px;pointer-events:none;display:none;transform:translate(-50%,-100%);white-space:nowrap;box-shadow:0 4px 12px rgba(0,0,0,.2)}
+#segtip b{font-weight:600}
+
+/* legend + rows */
+.legrow{display:flex;align-items:center;justify-content:space-between;gap:12px;background:none;border:none;padding:0;width:100%;text-align:left;cursor:pointer}
+.legrow .nm{font-size:14px;color:#475569}
+.legrow:hover .nm{color:#0f172a}
+.comp-toggle button{padding:4px 10px;font-size:13px}
+.metric{white-space:nowrap}
+.comp-card .v-pct{display:none}
+.comp-card.mode-pct .v-val{display:none}
+.comp-card.mode-pct .v-pct{display:inline}
+.dot{height:10px;width:10px;border-radius:999px;flex:0 0 auto}
+.listrow{display:flex;align-items:center;gap:12px;padding:8px;border-radius:12px;width:100%;text-align:left;background:none;border:none;cursor:pointer}
+.listrow:hover{background:#f8fafc}
+.rowtitle{font-size:14px;font-weight:500;color:#1e293b;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rowsub{font-size:12px;color:var(--pm-text-muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.divi>*+*{border-top:1px solid #f1f5f9}
+
+/* coverage */
+.track{position:relative;height:12px;border-radius:999px;background:#f1f5f9}
+.track>.fill{position:absolute;inset:0 auto 0 0;border-radius:999px;background:var(--pm-success)}
+.track>.badge2{position:absolute;top:-30px;transform:translateX(-50%);background:#0f172a;color:#fff;font-size:12px;border-radius:6px;padding:3px 7px}
+.cov-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.cov-pct{font-size:26px;font-weight:600;line-height:1;letter-spacing:-.02em}
+.cov-sub{font-size:12px;color:var(--pm-text-muted);margin-top:2px}
+
+/* segmented control */
+.seg-ctl{display:inline-flex;gap:4px;background:#f1f5f9;border-radius:8px;padding:4px}
+.seg-ctl button{border:none;background:none;border-radius:4px;padding:5px 12px;font-size:14px;font-weight:500;color:#64748b;cursor:pointer}
+.seg-ctl button.on{background:#fff;color:#0f172a;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+
+/* chart wrap */
+.chwrap{position:relative;width:100%}
+
+/* links in findings */
+.lnk{border:none;background:none;padding:0;color:#0f172a;font-weight:500;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;cursor:pointer}
+.lnk:hover{color:var(--pm-primary)}
+
+/* finding cards */
+.finding{border-radius:12px;padding:12px;border:1px solid}
+.f-amber{background:#fffbeb;border-color:#fde68a}
+.f-indigo{background:var(--pm-primary-subtle);border-color:#bfdbfe}
+.f-rose{background:#fff1f2;border-color:#fecdd3}
+
+/* overlay/modal */
+.ov{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(2,6,23,.5);backdrop-filter:blur(2px)}
+.ov-card{width:100%;max-width:32rem;background:#fff;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.25);max-height:90vh;overflow:auto}
+.ov-wide{max-width:min(64rem,94vw)}
+.txtbl td,.txtbl th{white-space:nowrap;vertical-align:middle}
+.ov-pad{padding:24px}
+
+/* chat */
+.chat{background:#fff;border:1px solid var(--pm-border-subtle);border-radius:16px;display:flex;flex-direction:column;height:min(560px,78vh)}
+@media(min-width:992px){.chat{height:min(680px,78vh)}}
+.chat-head{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid #f1f5f9}
+.chat-body{flex:1;overflow:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+.chat-foot{border-top:1px solid #f1f5f9;padding:12px}
+.bub{max-width:85%;border-radius:16px;padding:10px 14px;font-size:14px;line-height:1.5;white-space:pre-wrap}
+.bub-u{align-self:flex-end;background:var(--pm-primary);color:#fff}
+.bub-a{align-self:flex-start;background:#f1f5f9;color:#1e293b}
+.bub.md{white-space:normal}
+.md-p{margin:0 0 8px}.md-p:last-child{margin-bottom:0}
+.md-h{font-weight:600;margin:10px 0 4px;line-height:1.3}.md-h:first-child{margin-top:0}
+.md-h1{font-size:16px}.md-h2{font-size:15px}.md-h3{font-size:14px}.md-h4{font-size:13px}
+.bub.md ul.md-l,.bub.md ol.md-l{margin:4px 0 8px;padding-left:20px}
+.bub.md ul.md-l li,.bub.md ol.md-l li{margin:2px 0}
+.md-tw{overflow-x:auto;margin:6px 0;border-radius:8px}
+.ask-callout{display:flex;gap:10px;align-items:flex-start;background:var(--pm-primary-subtle);border:1px solid #c7d2fe;border-left:3px solid var(--pm-primary);border-radius:12px;padding:12px 14px;margin-bottom:16px}
+.ask-callout .ac-ico{color:var(--pm-primary);display:flex;margin-top:1px}.ask-callout .ac-ico svg{width:18px;height:18px}
+.ask-callout .ac-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--pm-primary)}
+.ask-callout .ac-text{font-size:14px;color:#1e293b;margin-top:2px;font-style:italic;line-height:1.45;overflow-wrap:anywhere}
+.ask-callout .ac-sub{font-size:12px;color:#64748b;margin-top:4px}
+.attach-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 24px;background:#f8fafc;border-bottom:1px solid var(--pm-border-subtle);flex-wrap:wrap}
+.attach-memo{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#92400e;white-space:nowrap}
+.attach-memo svg{width:13px;height:13px;flex:none}
+.web-disclaimer{display:flex;gap:8px;align-items:flex-start;font-size:11.5px;line-height:1.45;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:8px 10px;margin-bottom:10px}
+.web-disclaimer svg{width:14px;height:14px;flex:none;margin-top:1px}
+.upload-note{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.45;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:8px 10px;margin-top:12px}
+.upload-note svg{width:14px;height:14px;flex:none;margin-top:1px}
+.filechip{display:inline-flex;align-items:center;gap:8px;background:#f8fafc;border:1px solid var(--pm-border-subtle);border-radius:8px;padding:6px 10px;font-size:13px;max-width:100%}
+.filechip .fi{display:flex;color:#64748b}.filechip .fi svg{width:16px;height:16px}
+.filechip .fn{font-weight:500;color:#334155;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:200px}
+.filechip .fs{color:#94a3b8;font-size:12px;white-space:nowrap}
+.filechip .fx{border:none;background:transparent;color:#94a3b8;cursor:pointer;padding:0;display:flex;line-height:0}.filechip .fx svg{width:16px;height:16px}.filechip .fx:hover{color:#e11d48}
+.ws-row{min-width:0}
+.ws-row>[class*="col-"]{min-width:0}
+.chat{min-width:0}.chat-body{min-width:0}
+.bub{min-width:0}.bub.md{max-width:100%}
+.bub.md .md-tw{max-width:100%;min-width:0}
+.md-tbl{border-collapse:collapse;font-size:12.5px;width:100%}
+.md-tbl th,.md-tbl td{border:1px solid var(--pm-border-subtle);padding:4px 8px;text-align:left;white-space:nowrap}
+.md-tbl td[style*="right"],.md-tbl th[style*="right"]{font-variant-numeric:tabular-nums}
+.md-tbl th{background:#f8fafc;font-weight:600}
+.bub.md code{background:#e2e8f0;padding:1px 5px;border-radius:4px;font-size:12px}
+.bub.md strong{font-weight:600}
+.starter{display:block;width:100%;text-align:left;border:1px solid var(--pm-border-subtle);border-radius:8px;padding:8px 12px;font-size:14px;color:#334155;background:#fff;cursor:pointer;margin-top:8px}
+.starter:hover{border-color:#bfdbfe;background:var(--pm-primary-subtle)}
+
+/* report */
+.report-page{background:#fff;border:1px solid var(--pm-border-subtle);border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.05);padding:48px;min-height:60vh;outline:none}
+.spin{width:18px;height:18px;border:2px solid #cbd5e1;border-top-color:var(--pm-primary);border-radius:999px;display:inline-block;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+input.inp,select.inp,textarea.inp{width:100%;border:1px solid var(--pm-border-default);border-radius:8px;padding:9px 12px;font-size:14px;color:#0f172a;outline:none;font-family:inherit}
+input.inp:focus,select.inp:focus{border-color:var(--pm-primary);box-shadow:0 0 0 4px var(--pm-primary-subtle)}
+.lbl{font-size:12px;font-weight:500;color:#475569}
+@media print{.no-print{display:none!important}.report-page{box-shadow:none;border:none;padding:24px}.content{display:block}.app{display:block}}
+.svgico{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:-2px}
+.ai-spark{transform-origin:center;filter:drop-shadow(0 0 2px rgba(124,58,237,.45));animation:aiPulse 2.6s ease-in-out infinite}
+@keyframes aiPulse{0%,100%{transform:scale(1);opacity:.9}50%{transform:scale(1.16);opacity:1}}
+.btn-ai-review{transition:box-shadow .18s ease,border-color .18s ease}
+.btn-ai-review:hover{box-shadow:0 3px 12px rgba(124,58,237,.28);border-color:#c4b5fd}
+/* ---- Fraud Master additions (same token system; new domain surfaces) ---- */
+.pill-open{background:#eff6ff;color:#1d4ed8}.pill-cleared{background:#ecfdf5;color:#047857}.pill-confirmed{background:#fff1f2;color:#be123c}.pill-escalated{background:#f5f3ff;color:#6d28d9}
+.band{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600}
+.band-high{background:#fff1f2;color:#be123c}.band-med{background:#fffbeb;color:#b45309}.band-low{background:#f1f5f9;color:#475569}
+.score{display:inline-flex;align-items:center;justify-content:center;min-width:44px;height:28px;border-radius:8px;font-weight:600;font-size:14px}
+.score-high{background:#fff1f2;color:#be123c}.score-med{background:#fffbeb;color:#b45309}.score-low{background:#f1f5f9;color:#475569}
+.scorebig{font-size:40px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.rcode{display:inline-flex;align-items:center;gap:4px;border-radius:6px;padding:2px 6px;font-size:11px;font-weight:600;white-space:nowrap}
+.rc-rule{background:#fff1f2;color:#be123c}.rc-pattern{background:#eff6ff;color:#1d4ed8}
+.reason{display:flex;gap:12px;align-items:flex-start;padding:10px 0}
+.reason+.reason{border-top:1px solid #f1f5f9}
+.reason .rw{flex:0 0 auto;min-width:36px;text-align:right;font-weight:600;font-size:13px;color:#0f172a}
+.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:13px}
+.kv dt{color:var(--pm-text-muted);font-weight:500;margin:0}.kv dd{margin:0;color:#1e293b}
+.qtbl th{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#64748b;font-weight:600;background:#f8fafc;white-space:nowrap}
+.qtbl td{font-size:13px;vertical-align:middle;white-space:nowrap}
+.qtbl tbody tr{cursor:pointer}.qtbl tbody tr:hover td{background:#f8fafc}
+.qtbl .thb{border:none;background:none;padding:0;font:inherit;color:inherit;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.decopt{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--pm-border-subtle);border-radius:12px;padding:10px 12px;cursor:pointer}
+.decopt.on{border-color:var(--pm-primary);background:var(--pm-primary-subtle)}
+.decopt input{margin-top:3px}
+.guard{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.45;color:#1e3a8a;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:8px 10px}
+.guard svg{width:14px;height:14px;flex:none;margin-top:1px}
+.about h6{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--pm-primary);margin:20px 0 6px}
+.about h6:first-child{margin-top:0}
+.about p,.about li{font-size:14px;color:#334155;line-height:1.55}
+.about ul{padding-left:18px;margin:4px 0 0}
+.layer{border:1px solid var(--pm-border-subtle);border-radius:12px;padding:12px;height:100%}
+.layer .lt{font-size:13px;font-weight:600;color:#0f172a}.layer .ld{font-size:12px;color:#64748b;margin-top:4px;line-height:1.45}
+.flowstep{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:#334155;white-space:nowrap}
+.flowstep .fs-box{border:1px solid var(--pm-border-default);border-radius:8px;padding:6px 10px;background:#fff}
+.flowstep .fs-box.fm{border-color:var(--pm-primary);background:var(--pm-primary-subtle);color:#1e40af}
+.w-tile-off{opacity:.55;cursor:not-allowed}
+/* triage lane tiles (see pipeline block below for layout) */
+/* checklist */
+.chkrow{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
+.chkrow+.chkrow{border-top:1px solid #f1f5f9}
+.chk{flex:0 0 auto;width:22px;height:22px;border-radius:999px;display:flex;align-items:center;justify-content:center}
+.chk svg{width:13px;height:13px}
+.chk-ok{background:#ecfdf5;color:#047857}.chk-bad{background:#fff1f2;color:#be123c}
+/* AI assessment card */
+.ai-risklvl{font-size:16px;font-weight:800;letter-spacing:.02em}
+.src-tag{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;border-radius:999px;padding:2px 8px}
+.src-tag svg{width:12px;height:12px}
+.src-ai{background:#eef2ff;color:#4338ca}
+.src-local{background:#f1f5f9;color:#64748b}
+.ai-sig{border:1px solid #f1f5f9;border-radius:10px;padding:8px 10px;background:#fafafa}
+.ai-sev{display:inline-flex;align-items:center;font-size:10px;font-weight:700;border-radius:4px;padding:1px 6px;letter-spacing:.03em}
+.ai-hist{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px;border-top:1px solid #f1f5f9;padding-top:10px}
+.ai-hist-l{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8;font-weight:600}
+.ai-hist-v{font-size:13px;color:#334155;margin-top:2px;line-height:1.4}
+@media(max-width:520px){.ai-hist{grid-template-columns:1fr}}
+.ai-dot{display:inline-block;width:6px;height:6px;border-radius:999px;margin-right:5px;vertical-align:middle}
+.ai-dot-live{background:#4338ca}.ai-dot-local{background:#94a3b8}
+/* rules & tuning */
+.tune-tile{border:1px solid var(--pm-border-subtle);border-radius:12px;padding:12px 14px;height:100%}
+.tune-l{font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:#94a3b8;font-weight:600}
+.tune-v{font-size:16px;font-weight:700;margin-top:4px;color:#0f172a}
+.inp-sm{padding:4px 8px;font-size:13px}
+.tsw{position:relative;display:inline-block;width:38px;height:22px;cursor:pointer;margin:0}
+.tsw input{opacity:0;width:0;height:0;position:absolute}
+.tsw span{position:absolute;inset:0;background:#cbd5e1;border-radius:999px;transition:.15s}
+.tsw span:before{content:"";position:absolute;height:16px;width:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.15s}
+.tsw input:checked+span{background:var(--pm-primary)}
+.tsw input:checked+span:before{transform:translateX(16px)}
+.tsw input:disabled+span{opacity:.5;cursor:not-allowed}
+/* pipeline */
+.pipe{display:flex;align-items:stretch;gap:12px}
+.pipe-col{display:flex;flex-direction:column;gap:8px;min-width:0}
+.pipe-inbox,.pipe-outbox{flex:0 0 clamp(170px,20%,240px);min-width:0}
+.pipe-lanes{flex:1 1 auto;min-width:0}
+.pipe-cap{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:#94a3b8}
+.pipe-lane-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;flex:1}
+.pipe-arrow{display:flex;align-items:center;color:#cbd5e1;flex:0 0 auto;padding-top:22px}
+.pipe-arrow svg{width:20px;height:20px}
+.lane-tile{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--pm-surface-raised);border:1px solid var(--pm-border-subtle);border-radius:16px;padding:14px 16px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.05);height:100%;min-width:0}
+.lane-tile:hover{box-shadow:0 3px 10px rgba(0,0,0,.08)}
+.lane-tile.on{border-color:var(--pm-primary);box-shadow:0 0 0 1px var(--pm-primary)}
+.lane-stage{background:linear-gradient(180deg,#f5f3ff,#fff);border-color:#ddd6fe}
+.lane-stage.on{border-color:#6366f1;box-shadow:0 0 0 1px #6366f1}
+.lane-done{background:#f8fafc}
+.lane-top{display:flex;align-items:center;gap:8px;min-width:0}
+.lane-dot{width:10px;height:10px;border-radius:999px;flex:0 0 auto}
+.lane-label{font-size:14px;font-weight:600;color:#0f172a;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lane-count{margin-left:auto;font-size:22px;font-weight:700;letter-spacing:-.02em;color:#0f172a;flex:0 0 auto}
+.lane-sub{font-size:12px;color:var(--pm-text-muted);line-height:1.4;min-height:32px}
+.lane-amt{font-size:12px;color:#64748b;font-weight:500}
+/* mid widths (tablet / narrow desktop / artifact preview): stack the pipeline vertically,
+   drop the horizontal arrows, and let the three disposition lanes wrap 3-up then 2-up */
+@media(max-width:1200px){
+  .pipe{flex-direction:column}
+  .pipe-arrow{display:none}
+  .pipe-inbox,.pipe-outbox,.pipe-lanes{flex:1 1 auto}
+  .pipe-inbox .lane-tile,.pipe-outbox .lane-tile{flex-direction:row;align-items:center;flex-wrap:wrap;gap:4px 12px}
+  .pipe-inbox .lane-sub,.pipe-outbox .lane-sub{min-height:0;flex:1 1 100%;order:3}
+  .pipe-inbox .lane-amt,.pipe-outbox .lane-amt{order:2;margin-left:auto}
+}
+@media(max-width:760px){.pipe-lane-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.pipe-lane-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="modal-root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+"use strict";
+/* ---------------- formatters ---------------- */
+const peso=(n)=>new Intl.NumberFormat("en-PH",{style:"currency",currency:"PHP",maximumFractionDigits:0}).format(n||0);
+const pesoCompact=(n)=>{const v=n||0;if(v>=1e6)return "\u20b1"+(v/1e6).toFixed(1)+"M";if(v>=1e3)return "\u20b1"+(v/1e3).toFixed(0)+"k";return "\u20b1"+Math.round(v);};
+const pct=(n)=>(n||0).toFixed(1)+"%";
+const esc=(s)=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const escA=(s)=>String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;");
+function formatNums(t){
+ if(t==null)return "";
+ return String(t).replace(/(?<![\d.])\d{4,}(?!\d)/g,function(n){
+  if(n.length===4){var y=+n;if(y>=1900&&y<=2099)return n;}
+  return n.replace(/\B(?=(\d{3})+(?!\d))/g,",");
+ });
+}
+function mdInline(t){
+ return t
+  .replace(/`([^`]+)`/g,'<code>$1</code>')
+  .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+  .replace(/__([^_]+)__/g,'<strong>$1</strong>')
+  .replace(/(^|[^*])\*([^*\n]+)\*/g,'$1<em>$2</em>')
+  .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');
+}
+function mdCells(row){return row.trim().replace(/^\|/,'').replace(/\|$/,'').split('|').map(function(c){return c.trim();});}
+function mdRender(raw){
+ var lines=esc(String(raw==null?'':raw)).split(/\r?\n/);var out=[];var i=0;
+ while(i<lines.length){
+  var line=lines[i];
+  if(/^\s*\|.*\|\s*$/.test(line)&&i+1<lines.length&&/^\s*\|?[\s:|-]+\|[\s:|-]*$/.test(lines[i+1])){
+   var headCells=mdCells(line);var sepCells=mdCells(lines[i+1]);i+=2;var bodyRows=[];
+   while(i<lines.length&&/\|/.test(lines[i])&&lines[i].trim()!==''){bodyRows.push(mdCells(lines[i]));i++;}
+   var aligns=[];for(var ci=0;ci<headCells.length;ci++){var sep=(sepCells[ci]||'').trim();var a='';if(/^:.*:$/.test(sep))a='center';else if(/:$/.test(sep))a='right';else if(/^:/.test(sep))a='left';if(!a){var vals=bodyRows.map(function(r){return (r[ci]||'').trim();}).filter(function(x){return x!=='';});a=(vals.length>0&&vals.every(function(x){return /\d/.test(x)&&!/[A-Za-z]{2,}/.test(x);}))?'right':'left';}aligns.push(a);}
+   var th='<tr>'+headCells.map(function(c,ci){return '<th style="text-align:'+aligns[ci]+'">'+mdInline(c)+'</th>';}).join('')+'</tr>';
+   var tb=bodyRows.map(function(r){return '<tr>'+r.map(function(c,ci){return '<td style="text-align:'+(aligns[ci]||'left')+'">'+mdInline(c)+'</td>';}).join('')+'</tr>';}).join('');
+   out.push('<div class="md-tw"><table class="md-tbl"><thead>'+th+'</thead><tbody>'+tb+'</tbody></table></div>');continue;
+  }
+  var h=line.match(/^\s*(#{1,4})\s+(.*)$/);
+  if(h){out.push('<div class="md-h md-h'+h[1].length+'">'+mdInline(h[2])+'</div>');i++;continue;}
+  if(/^\s*[-*]\s+/.test(line)){var it=[];while(i<lines.length&&/^\s*[-*]\s+/.test(lines[i])){it.push('<li>'+mdInline(lines[i].replace(/^\s*[-*]\s+/,''))+'</li>');i++;}out.push('<ul class="md-l">'+it.join('')+'</ul>');continue;}
+  if(/^\s*\d+\.\s+/.test(line)){var io=[];while(i<lines.length&&/^\s*\d+\.\s+/.test(lines[i])){io.push('<li>'+mdInline(lines[i].replace(/^\s*\d+\.\s+/,''))+'</li>');i++;}out.push('<ol class="md-l">'+io.join('')+'</ol>');continue;}
+  if(line.trim()===''){i++;continue;}
+  var para=[line];i++;
+  while(i<lines.length&&lines[i].trim()!==''&&!/^\s*[-*]\s+/.test(lines[i])&&!/^\s*\d+\.\s+/.test(lines[i])&&!/^\s*#{1,4}\s+/.test(lines[i])&&!/^\s*\|.*\|\s*$/.test(lines[i])){para.push(lines[i]);i++;}
+  out.push('<p class="md-p">'+para.map(mdInline).join('<br>')+'</p>');
+ }
+ return out.join('')||'<p class="md-p"></p>';
+}
+
+/* ---------------- icons (inline svg) ---------------- */
+const IC={
+ dash:'<svg class="svgico" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>',
+ bu:'<svg class="svgico" viewBox="0 0 24 24"><path d="M3 21h18M6 21V7l6-4 6 4v14"/><path d="M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01"/></svg>',
+ users:'<svg class="svgico" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg>',
+ trend:'<svg class="svgico" viewBox="0 0 24 24"><path d="M22 7l-8.5 8.5-5-5L2 17"/><path d="M16 7h6v6"/></svg>',
+ file:'<svg class="svgico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+ shieldoff:'<svg class="svgico" viewBox="0 0 24 24"><path d="M19.7 14A2 2 0 0 0 20 13V5l-8-3-3.2 1.2"/><path d="M4.7 4.7 4 5v8c0 6 8 9 8 9a20 20 0 0 0 5.6-3.6"/><path d="M2 2l20 20"/></svg>',
+ shield:'<svg class="svgico" viewBox="0 0 24 24"><path d="M12 22s8-3 8-9V5l-8-3-8 3v8c0 6 8 9 8 9z"/><path d="M9 12l2 2 4-4"/></svg>',
+ sparkles:'<svg class="svgico" viewBox="0 0 24 24"><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4z"/><path d="M19 14l.8 2 .2.8-2-.8-2 .8.8-2-.8-2 2 .8z"/></svg>',
+ sparklesColor:'<svg class="svgico ai-spark" viewBox="0 0 24 24"><defs><linearGradient id="aigrad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8b5cf6"/><stop offset=".5" stop-color="#2563eb"/><stop offset="1" stop-color="#ec4899"/></linearGradient></defs><path d="M12 3l1.9 4.6L18.5 9l-4.6 1.9L12 15l-1.9-4.1L5.5 9l4.6-1.4z" fill="url(#aigrad)" stroke="url(#aigrad)"/><path d="M19 14l.8 2 .2.8-2-.8-2 .8.8-2-.8-2 2 .8z" fill="url(#aigrad)" stroke="url(#aigrad)"/></svg>',
+ plus:'<svg class="svgico" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+ file:'<svg class="svgico" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+ msg:'<svg class="svgico" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+ clock:'<svg class="svgico" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M12 14v3l2 1"/></svg>',
+ x:'<svg class="svgico" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+ back:'<svg class="svgico" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>',
+ send:'<svg class="svgico" viewBox="0 0 24 24"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg>',
+ warn:'<svg class="svgico" viewBox="0 0 24 24"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/><path d="M12 9v4M12 17h.01"/></svg>',
+ print:'<svg class="svgico" viewBox="0 0 24 24"><path d="M6 9V2h12v7M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>',
+ dl:'<svg class="svgico" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>',
+ cpu:'<svg class="svgico" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2"/></svg>',
+ refresh:'<svg class="svgico" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></svg>',
+ key:'<svg class="svgico" viewBox="0 0 24 24"><circle cx="7.5" cy="15.5" r="4.5"/><path d="M10.5 12.5 21 2M18 5l2 2M15 8l2 2"/></svg>'
+};
+IC.search='<svg class="svgico" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>';
+IC.list='<svg class="svgico" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>';
+IC.info='<svg class="svgico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
+IC.check='<svg class="svgico" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>';
+IC.flag='<svg class="svgico" viewBox="0 0 24 24"><path d="M4 22V4a1 1 0 0 1 1-1h11l-1 4 1 4H5"/></svg>';
+IC.building='<svg class="svgico" viewBox="0 0 24 24"><path d="M3 21h18M6 21V7l6-4 6 4v14"/><path d="M9 9h.01M9 13h.01M9 17h.01M15 9h.01M15 13h.01"/></svg>';
+IC.arrowRight='<svg class="svgico" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+IC.users='<svg class="svgico" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>';
+IC.gear='<svg class="svgico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>';
+
+/* ---------------- constants: channels, BUs, natures, customers, people, roles ---------------- */
+const CHANNELS=[["General Trade",7],["MT National Chains",3]];
+const BUS=[["Company 1 (Foods)",5],["Company 2 (Beverages)",4],["Company 3 (Spirits)",2]];
+const ALL_BUS=BUS.map(b=>b[0]);
+const ALL_CHANNELS=CHANNELS.map(c=>c[0]);
+/* [nature, group, weight, amountMin, amountMax, needsPAW] */
+const NATURES=[
+ ["Sales Discount","Sales Discount Charges",34,12000,110000,false],
+ ["Promo Local Trade and Consumer Promotional","Trade Cost-related",14,20000,190000,true],
+ ["Promo Local - Others","Trade Cost-related",10,18000,150000,true],
+ ["Promo Local Supermarkets (Display Allowance)","Trade Cost-related",9,25000,140000,true],
+ ["Promo - National","Trade Cost-related",3,20000,95000,true],
+ ["Supplies/Barcode","OPEX-related charges",6,5000,380000,false],
+ ["Distribution Cost Allowance","OPEX-related charges",7,10000,60000,false],
+ ["Subscription","OPEX-related charges",3,8000,45000,false],
+ ["Weighing Scale Rental","OPEX-related charges",1,2000,6000,false]
+];
+const NATURE_COLORS=["#2563eb","#0ea5e9","#10b981","#f59e0b","#ef4444","#8b5cf6","#ec4899","#14b8a6","#64748b"];
+const GT_CUSTOMERS=["GT Customer 01","GT Customer 02","GT Customer 03","GT Customer 04","GT Customer 05","GT Customer 06","GT Customer 07","GT Customer 08","GT Customer 09","GT Customer 10","GT Customer 11","GT Customer 12","GT Customer 13","GT Customer 14"];
+const MT_CUSTOMERS=["MT Customer 01","MT Customer 02","MT Customer 03","MT Customer 04","MT Customer 05","MT Customer 06","MT Customer 07","MT Customer 08"];
+const REQUESTERS=["Requester 01","Requester 02","Requester 03","Requester 04","Requester 05","Requester 06","Requester 07","Requester 08","Requester 09","Requester 10","Requester 11","Requester 12"];
+/* [approver, delegated limit] - illustrative approval matrix */
+const APPROVERS=[["Approver A",100000],["Approver B",250000],["Approver C",500000],["Approver D",1000000],["Approver E",2500000]];
+/* Roles are FUNCTIONS, not data slices. Each lands on the screen that matches its job.
+   home = default screen; perms = what the role may do; scope = data it may see.
+   decide  : record a per-case decision (Reviewer, Team Lead)
+   qa      : QA sample and reason-code performance (Team Lead)
+   controls: rule performance + gate-preventable view + all lanes (Controls, Audit)
+   audit   : read-only investigation view (Internal Audit) */
+const ROLES=[
+ {id:"reviewer",label:"FS Reviewer",home:"queue",perms:["decide"],scope:{channel:["General Trade"]},note:"General Trade queue"},
+ {id:"lead",label:"FS Team Lead / QA",home:"queue",perms:["decide","qa"],scope:"all",note:"All channels"},
+ {id:"controls",label:"FS Controls Lead",home:"controls",perms:["decide","qa","controls","tuning"],scope:"all",note:"All channels and business units"},
+ {id:"audit",label:"Internal Audit / Risk",home:"controls",perms:["controls","audit"],scope:"all",note:"All channels (read-only)"}
+];
+const dataScopeLabel=(r)=>r.note;
+const can=(p)=>role().perms.includes(p);
+const readOnly=()=>role().perms.includes("audit")&&!role().perms.includes("decide");
+const allowedBUsFor=(r)=>r.scope==="all"?ALL_BUS:(r.scope.bu?r.scope.bu:ALL_BUS);
+function scopeRows(rows,r){if(r.scope==="all")return rows;if(r.scope.bu)return rows.filter(x=>r.scope.bu.includes(x.bu));if(r.scope.channel)return rows.filter(x=>r.scope.channel.includes(x.channel));return rows;}
+
+/* Pipeline: raw data -> Run analysis (context -> LLM or local fallback -> assessment) -> lane -> Decided.
+   A credit enters the lanes only after a run assesses it (state.assessments[id] set, id in state.loaded).
+   The assessment's recommended_queue drives the lane; deterministic hard-stops force Investigate. */
+const STP_MAX=12;
+const STRUCTURING=new Set(["DUP","SPLIT"]);
+const hasStructuring=(r)=>r.reasons.some(x=>STRUCTURING.has(x.code));
+const isLoaded=(r)=>state.loaded.has(r.id);
+const assessmentOf=(r)=>state.assessments[r.id]||null;
+function routeLane(r){
+ const a=assessmentOf(r);
+ if(a&&a.lane)return a.lane;              /* AI or local assessment routes it */
+ /* pre-assessment fallback (should not normally happen once loaded) */
+ if(r.band==="high"||hasStructuring(r))return "investigate";
+ if(r.band==="med"||hasRule(r)||r.reasons.length)return "review";
+ return "stp";
+}
+function stageOf(r){
+ if(statusOf(r)!=="Open")return "done";
+ return routeLane(r);
+}
+const laneOf=(r)=>stageOf(r);
+const STAGES=[
+ {id:"investigate",label:"Investigate",sub:"AI-assessed high risk or a mandatory control hit. Needs a closer look.",tone:"rose",color:"#e11d48"},
+ {id:"review",label:"Review",sub:"AI-assessed medium risk to clear or confirm.",tone:"amber",color:"#f59e0b"},
+ {id:"stp",label:"Straight-through",sub:"Assessed low risk. Candidate to auto-clear (BA-defined).",tone:"emerald",color:"#10b981"}
+];
+const LANES=STAGES;
+function laneCounts(rows){const c={investigate:0,review:0,stp:0,done:0},a={investigate:0,review:0,stp:0,done:0};rows.forEach(r=>{const l=stageOf(r);c[l]++;a[l]+=r.amount;});return{c,a};}
+/* shown score = AI risk score when assessed, else the engine score */
+function shownScore(r){const a=assessmentOf(r);return a&&Number.isFinite(a.ai_risk_score)?a.ai_risk_score:r.score;}
+function shownBand(r){const a=assessmentOf(r);if(a&&a.risk_level)return {HIGH:"high",MEDIUM:"med",LOW:"low"}[a.risk_level]||r.band;return r.band;}
+
+
+/* Reason codes. type "rule" = deterministic control (should be stopped at the gate); type "pattern" = cross-transaction analytics.
+   Weights are ILLUSTRATIVE for the demo. The governed thresholds and weights are a BA / vendor decision, not a UI decision. */
+const RC={
+ SOD:{type:"rule",label:"Requestor is also the approver",w:50,area:"rules"},
+ OVER_LIMIT:{type:"rule",label:"Amount above the approver's delegated limit",w:45,area:"rules"},
+ PAW_EXP:{type:"rule",label:"Promo approval expired before posting",w:40,area:"rules"},
+ IO_CLOSED:{type:"rule",label:"Charged to a closed Internal Order",w:40,area:"rules"},
+ PAW_ADV:{type:"rule",label:"Posted before the promo approval activity started (advance deduction)",w:35,area:"rules"},
+ ATT_MISS:{type:"rule",label:"Mandatory attachment missing",w:20,area:"rules"},
+ DUP:{type:"pattern",label:"Near-duplicate of another credit",w:60,area:"duplicate"},
+ SPLIT:{type:"pattern",label:"Sub-limit cluster that sums over the approval limit",w:60,area:"splitting"},
+ FREQ:{type:"pattern",label:"Unusual credit frequency for this customer",w:25,area:"behavior"},
+ AMT:{type:"pattern",label:"Amount far above this customer's norm",w:25,area:"behavior"},
+ PERIOD:{type:"pattern",label:"Posted at period-end",w:5,area:"behavior"},
+ HOURS:{type:"pattern",label:"Posted outside business hours",w:5,area:"behavior"}
+};
+const RC_ORDER=Object.keys(RC);
+/* ---- editable rules overlay (Rules & Tuning). In-memory only for the prototype.
+   ruleOverrides[code] = {w, enabled, hard} override the baked RC defaults.
+   Custom rules added by a Controls Lead live here too (added to RC at add-time). ---- */
+const ruleOverrides={};
+const DEFAULT_HARD=new Set(["SOD","OVER_LIMIT"]);
+function RULE_W(code){const o=ruleOverrides[code];return o&&Number.isFinite(o.w)?o.w:(RC[code]?RC[code].w:0);}
+function RULE_ENABLED(code){const o=ruleOverrides[code];return o&&o.enabled!==undefined?!!o.enabled:true;}
+function RULE_HARD(code){const o=ruleOverrides[code];return o&&o.hard!==undefined?!!o.hard:DEFAULT_HARD.has(code);}
+const bandOf=(s)=>s>=60?"high":s>=30?"med":"low";
+const BAND_LABEL={high:"High",med:"Medium",low:"Low"};
+const BAND_COLOR={high:"#e11d48",med:"#f59e0b",low:"#94a3b8"};
+
+/* ---------------- data generation (mock, deterministic) ---------------- */
+function mulberry32(a){return function(){a|=0;a=(a+0x6d2b79f5)|0;let t=Math.imul(a^(a>>>15),1|a);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};}
+function wpick(rng,entries){const tot=entries.reduce((s,e)=>s+e[1],0);let r=rng()*tot;for(const[v,w]of entries){if((r-=w)<=0)return v;}return entries[0][0];}
+const pick=(rng,arr)=>arr[Math.floor(rng()*arr.length)];
+const isoDate=(ms)=>new Date(ms).toISOString().slice(0,10);
+const DAY=86400000;
+function endOfMonth(d){const x=new Date(d.getFullYear(),d.getMonth()+1,0);return x.getDate();}
+let cmSeq=0;
+function mkCM(rng,over){
+ const now=Date.now();
+ const channel=over.channel||wpick(rng,CHANNELS);
+ const customer=over.customer||pick(rng,channel==="General Trade"?GT_CUSTOMERS:MT_CUSTOMERS);
+ const nat=over.nature||wpick(rng,NATURES.map(n=>[n,n[2]]));
+ const bu=over.bu||wpick(rng,BUS);
+ const ms=over.ms!=null?over.ms:now-Math.floor(rng()*365)*DAY-Math.floor(rng()*DAY);
+ const d=new Date(ms);
+ const mtBoost=channel==="MT National Chains"?2.2:1;
+ let amount=over.amount!=null?over.amount:Math.round((nat[3]+Math.pow(rng(),1.6)*(nat[4]-nat[3]))*mtBoost/100)*100;
+ const requester=over.requester||pick(rng,REQUESTERS);
+ let ap=over.approver||APPROVERS.find(a=>a[1]>=amount)||APPROVERS[APPROVERS.length-1];
+ if(!over.approver&&rng()<0.25){const i=APPROVERS.indexOf(ap);if(i<APPROVERS.length-1)ap=APPROVERS[i+1];}
+ const hour=over.hour!=null?over.hour:8+Math.floor(rng()*10);
+ const needsPAW=nat[5];
+ const pawStart=ms-(20+Math.floor(rng()*40))*DAY;
+ const paw=needsPAW?{id:"PA-26-"+String(1000+Math.floor(rng()*900)),from:isoDate(over.pawFrom!=null?over.pawFrom:pawStart),to:isoDate(over.pawTo!=null?over.pawTo:pawStart+(60+Math.floor(rng()*60))*DAY)}:null;
+ const io={id:"IO-"+String(700000+Math.floor(rng()*90000)),status:over.ioStatus||"Open"};
+ const attReq=3,attProv=over.attProv!=null?over.attProv:3;
+ const invoice="INV-"+d.getFullYear().toString().slice(2)+String(100000+Math.floor(rng()*900000));
+ const intervention=over.intervention!==undefined?over.intervention:(rng()<0.06?pick(rng,["Internal Order issue","Details issue","Attachment issue","Attachment issue","Details issue"]):null);
+ cmSeq++;
+ return{id:"CM-"+String(d.getFullYear()).slice(2)+String(d.getMonth()+1).padStart(2,"0")+"-"+String(cmSeq).padStart(4,"0"),date:isoDate(ms),ms,hour,channel,bu,customer,nature:nat[0],group:nat[1],amount,requester,approver:ap[0],limit:ap[1],paw,io,attReq,attProv,invoice,intervention,planted:over.planted||null};
+}
+function generateData(seed=20260904,count=620){
+ const rng=mulberry32(seed);cmSeq=0;const rows=[];const now=Date.now();
+ for(let i=0;i<count;i++)rows.push(mkCM(rng,{}));
+ /* planted scenarios so the demo has something to find. Each is labelled in row.planted for the demo only. */
+ const gt=(o)=>Object.assign({channel:"General Trade"},o);
+ /* near-duplicate pairs: same customer + nature, amount within 2%, 3 to 12 days apart, different invoice ref */
+ for(let k=0;k<6;k++){const base=mkCM(rng,{ms:now-Math.floor(rng()*300)*DAY,planted:"dup"});rows.push(base);const twin=mkCM(rng,{channel:base.channel,customer:base.customer,nature:NATURES.find(n=>n[0]===base.nature),bu:base.bu,ms:base.ms+(3+Math.floor(rng()*9))*DAY,amount:Math.round(base.amount*(0.992+rng()*0.016)/100)*100,requester:rng()<0.6?base.requester:undefined,hour:rng()<0.4?21:undefined,planted:"dup"});rows.push(twin);}
+ /* split clusters: 3 to 4 credits, same customer + requester, each just under the approver limit, within 6 days */
+ for(let k=0;k<5;k++){const ap=pick(rng,APPROVERS.slice(0,3));const cust=pick(rng,GT_CUSTOMERS);const req=pick(rng,REQUESTERS);const start=now-Math.floor(rng()*330)*DAY;const n=3+(rng()<0.5?1:0);const nat=pick(rng,NATURES.slice(1,5));const fr=[0.82,0.87,0.92,0.97].sort(()=>rng()-0.5);
+  for(let j=0;j<n;j++)rows.push(mkCM(rng,gt({customer:cust,requester:req,approver:ap,nature:nat,ms:start+Math.floor(rng()*6)*DAY,amount:Math.round(ap[1]*fr[j]/1000)*1000,attProv:(k%2===0&&j===n-1)?2:3,planted:"split"})));}
+ /* frequency spikes: 5 to 7 credits to one customer within 3 weeks */
+ for(let k=0;k<4;k++){const cust=pick(rng,GT_CUSTOMERS);const start=now-Math.floor(rng()*320)*DAY;const n=6+Math.floor(rng()*3);const req=pick(rng,REQUESTERS);for(let j=0;j<n;j++)rows.push(mkCM(rng,gt({customer:cust,requester:req,ms:start+Math.floor(rng()*21)*DAY,approver:(k===0&&j===0)?[req,250000]:undefined,planted:"freq"})));}
+ /* abnormal amounts: 3.5x to 6x a customer's usual size, still under a higher approver's limit */
+ for(let k=0;k<5;k++){const cust=pick(rng,GT_CUSTOMERS.concat(MT_CUSTOMERS));const nat=pick(rng,NATURES);const amt=Math.round(nat[4]*(3.5+rng()*2.5)/1000)*1000;rows.push(mkCM(rng,{customer:cust,nature:nat,channel:GT_CUSTOMERS.includes(cust)?"General Trade":"MT National Chains",amount:amt,approver:APPROVERS.find(a=>a[1]>=amt)||APPROVERS[4],ms:now-Math.floor(rng()*340)*DAY,planted:"amt"}));}
+ /* deterministic control hits (these belong at the gate; in a historical batch they still surface) */
+ for(let k=0;k<7;k++){const ms=now-Math.floor(rng()*340)*DAY;rows.push(mkCM(rng,{ms,nature:pick(rng,NATURES.slice(1,5)),pawFrom:ms-90*DAY,pawTo:ms-(2+Math.floor(rng()*20))*DAY,planted:"pawexp"}));}
+ for(let k=0;k<5;k++){const ms=now-Math.floor(rng()*340)*DAY;rows.push(mkCM(rng,{ms,nature:pick(rng,NATURES.slice(1,5)),pawFrom:ms+(3+Math.floor(rng()*14))*DAY,pawTo:ms+60*DAY,planted:"advance"}));}
+ for(let k=0;k<5;k++)rows.push(mkCM(rng,{ms:now-Math.floor(rng()*340)*DAY,ioStatus:"Closed",hour:k<2?22:undefined,planted:"io"}));
+ for(let k=0;k<4;k++){const req=pick(rng,REQUESTERS);rows.push(mkCM(rng,{ms:now-Math.floor(rng()*340)*DAY,requester:req,approver:[req,250000],amount:Math.round((60000+rng()*150000)/1000)*1000,planted:"sod"}));}
+ for(let k=0;k<6;k++)rows.push(mkCM(rng,{ms:now-Math.floor(rng()*340)*DAY,attProv:1+Math.floor(rng()*2),planted:"att"}));
+ for(let k=0;k<3;k++){const ap=pick(rng,APPROVERS.slice(0,3));rows.push(mkCM(rng,{ms:now-Math.floor(rng()*340)*DAY,approver:ap,amount:Math.round(ap[1]*(1.05+rng()*0.4)/1000)*1000,planted:"over"}));}
+ for(let k=0;k<12;k++){const d=new Date(now-Math.floor(rng()*11)*30*DAY);const eom=endOfMonth(d);const t=new Date(d.getFullYear(),d.getMonth(),eom-(rng()<0.5?0:1),10).getTime();if(t<now)rows.push(mkCM(rng,{ms:t,planted:"period"}));}
+ for(let k=0;k<8;k++)rows.push(mkCM(rng,{ms:now-Math.floor(rng()*340)*DAY,hour:rng()<0.5?(21+Math.floor(rng()*3)):(4+Math.floor(rng()*3)),planted:"hours"}));
+ return rows.sort((a,b)=>b.ms-a.ms);
+}
+const sum=(arr,f)=>arr.reduce((s,x)=>s+f(x),0);
+function groupSum(rows,key){const m={};for(const r of rows)m[r[key]]=(m[r[key]]||0)+r.amount;return Object.entries(m).map(([name,amount])=>({name,amount})).sort((a,b)=>b.amount-a.amount);}
+function groupCount(rows,key){const m={};for(const r of rows)m[r[key]]=(m[r[key]]||0)+1;return Object.entries(m).map(([name,n])=>({name,n})).sort((a,b)=>b.n-a.n);}
+const median=(a)=>{if(!a.length)return 0;const s=a.slice().sort((x,y)=>x-y);const m=Math.floor(s.length/2);return s.length%2?s[m]:(s[m-1]+s[m])/2;};
+
+/* ---------------- scoring engine (local, deterministic, explainable) ----------------
+   Layer 1 rules and Layer 2 pattern analytics run here in the browser over the full dataset.
+   The LLM never scores. It only explains, summarises, and answers questions over authorized rows. */
+function scoreAll(rows){
+ const byCust={};rows.forEach(r=>(byCust[r.customer]||(byCust[r.customer]=[])).push(r));
+ for(const r of rows){r.reasons=[];r.related=new Set();
+  const add=(code,evidence,rel)=>{r.reasons.push({code,evidence});if(rel)rel.forEach(x=>{if(x.id!==r.id)r.related.add(x.id);});};
+  const d=new Date(r.ms);
+  if(r.requester===r.approver)add("SOD",r.requester+" both requested and approved this credit.");
+  if(r.amount>r.limit)add("OVER_LIMIT",peso(r.amount)+" exceeds "+r.approver+"'s limit of "+peso(r.limit)+".");
+  if(r.paw&&r.date>r.paw.to)add("PAW_EXP",r.paw.id+" ended "+r.paw.to+"; credit posted "+r.date+".");
+  if(r.paw&&r.date<r.paw.from)add("PAW_ADV",r.paw.id+" activity starts "+r.paw.from+"; credit posted "+r.date+", before execution.");
+  if(r.io.status==="Closed")add("IO_CLOSED",r.io.id+" is closed; the credit still charged to it.");
+  if(r.attProv<r.attReq)add("ATT_MISS",r.attProv+" of "+r.attReq+" mandatory attachments on file.");
+  const mine=byCust[r.customer]||[];
+  const dups=mine.filter(x=>x.id!==r.id&&x.nature===r.nature&&Math.abs(x.amount-r.amount)/r.amount<=0.01&&Math.abs(x.ms-r.ms)<=10*DAY);
+  if(dups.length)add("DUP",dups.map(x=>x.id+" ("+peso(x.amount)+", "+x.date+", "+x.invoice+")").join("; ")+" for the same customer and nature.",dups);
+  const near=mine.filter(x=>x.id!==r.id&&x.requester===r.requester&&x.approver===r.approver&&Math.abs(x.ms-r.ms)<=7*DAY&&x.amount>=0.8*x.limit&&x.amount<x.limit);
+  if(r.amount>=0.8*r.limit&&r.amount<r.limit&&near.length>=2){const grp=near.concat([r]);const tot=sum(grp,x=>x.amount);if(tot>r.limit)add("SPLIT",grp.length+" credits by "+r.requester+" within 7 days, each under "+peso(r.limit)+", totalling "+peso(tot)+".",near);}
+  const win=mine.filter(x=>Math.abs(x.ms-r.ms)<=15*DAY);const pace=Math.max(1,mine.length/12);const fthr=Math.max(5,Math.ceil(pace*2.5));
+  if(win.length>=fthr)add("FREQ",win.length+" credits to "+r.customer+" within 30 days, against a usual pace of about "+pace.toFixed(1)+" per month.",win);
+  const others=mine.filter(x=>x.id!==r.id).map(x=>x.amount);
+  if(others.length>=4){const md=median(others);if(md>0&&r.amount>=3*md)add("AMT",peso(r.amount)+" is "+(r.amount/md).toFixed(1)+"x this customer's median credit of "+peso(md)+".");}
+  const eom=endOfMonth(d);if(d.getDate()>=eom-1)add("PERIOD","Posted "+r.date+", within two days of month-end.");
+  if(r.hour<7||r.hour>19)add("HOURS","Posted at "+String(r.hour).padStart(2,"0")+":00, outside 07:00 to 19:00.");
+  r.reasons=r.reasons.filter(x=>RULE_ENABLED(x.code)); /* disabled rules do not contribute */
+  r.reasons.sort((a,b)=>RULE_W(b.code)-RULE_W(a.code));
+  r.score=Math.min(100,sum(r.reasons,x=>RULE_W(x.code)));
+  r.band=bandOf(r.score);
+  r.related=[...r.related];
+ }
+ return rows;
+}
+const hasRule=(r)=>r.reasons.some(x=>RC[x.code].type==="rule");
+const hasPattern=(r)=>r.reasons.some(x=>RC[x.code].type==="pattern");
+const topReason=(r)=>r.reasons.length?RC[r.reasons[0].code].label:"";
+
+/* ================= CONTEXT BUILDER =================
+   Per-case behavioral profile sent to the LLM. Derives statistics (not raw dumps):
+   the customer's own baseline, this credit's deviation, related cross-transaction facts,
+   and the deterministic control findings as structured evidence. */
+/* hard-stop membership is dynamic via RULE_HARD (editable in Rules & Tuning) */
+const HARD_STOP_CODES={has:(code)=>RULE_HARD(code)};
+function customerBaseline(cust,allRows){
+ const mine=allRows.filter(r=>r.customer===cust);
+ const amts=mine.map(r=>r.amount).sort((a,b)=>a-b);
+ const md=median(amts), avg=amts.length?Math.round(sum(mine,r=>r.amount)/amts.length):0;
+ const lo=amts.length?amts[Math.floor(amts.length*0.05)]:0, hi=amts.length?amts[Math.floor(amts.length*0.95)]:0;
+ const months=Math.max(1,(Math.max(...mine.map(r=>r.ms))-Math.min(...mine.map(r=>r.ms)))/(30*DAY));
+ return {transactions:mine.length, median:Math.round(md), average:avg, p05:Math.round(lo), p95:Math.round(hi), monthly_pace:+(mine.length/months).toFixed(1), rows:mine};
+}
+function buildCaseContext(r,allRows){
+ const base=customerBaseline(r.customer,allRows);
+ const win=(days)=>base.rows.filter(x=>Math.abs(x.ms-r.ms)<=days*DAY).length;
+ const related=(r.related||[]).map(id=>allRows.find(x=>x.id===id)).filter(Boolean);
+ const relatedTotal=sum(related,x=>x.amount)+r.amount;
+ const controlHits=r.reasons.filter(x=>RC[x.code].type==="rule").map(x=>({code:x.code,label:RC[x.code].label,evidence:x.evidence,hard_stop:RULE_HARD(x.code)}));
+ const patternHits=r.reasons.filter(x=>RC[x.code].type==="pattern").map(x=>({code:x.code,label:RC[x.code].label,evidence:x.evidence}));
+ const dfm=Math.min(r.date.slice(8)-0, endOfMonth(new Date(r.ms))-(r.date.slice(8)-0));
+ return {
+  case_id:r.id,
+  current_transaction:{
+   transaction_type:"Credit Memo", nature:r.nature, channel:r.channel, business_unit:r.bu,
+   customer:r.customer, requester:r.requester, approver:r.approver, approval_limit:r.limit,
+   amount:r.amount, posted_date:r.date, posted_hour:r.hour,
+   invoice_dm:r.invoice, internal_order:r.io.id, io_status:r.io.status,
+   paw:r.paw?{id:r.paw.id,from:r.paw.from,to:r.paw.to}:null,
+   attachments:{provided:r.attProv,required:r.attReq},
+   prior_intervention:r.intervention||null
+  },
+  customer_baseline:{
+   historical_transactions:base.transactions, median_amount:base.median, average_amount:base.average,
+   normal_range_p05_p95:[base.p05,base.p95], normal_monthly_pace:base.monthly_pace,
+   ratio_to_median:base.median?+(r.amount/base.median).toFixed(2):null,
+   credits_last_7d:win(7), credits_last_30d:win(30), credits_last_90d:win(90)
+  },
+  cross_transaction:{
+   related_credit_ids:related.map(x=>x.id),
+   related_count:related.length,
+   related_combined_amount:relatedTotal,
+   related_exceeds_limit:relatedTotal>r.limit,
+   days_from_month_end:dfm
+  },
+  deterministic_controls:controlHits,
+  behavioral_signals:patternHits,
+  policy_context:"AR Credit Memo deduction. Prerequisites: valid promo approval/IO, within approval limit, segregation of duties, complete attachments."
+ };
+}
+
+/* ================= LOCAL MASKING (DLP) =================
+   Replaces identifiers with stable aliases before context leaves the browser; keeps a local
+   map for rehydration. Business terms and amounts are never masked. */
+const maskMap={fwd:{},rev:{},seq:{customer:0,requester:0,approver:0,cm:0,invoice:0,io:0}};
+function alias(kind,val){
+ if(!val)return val;const key=kind+"::"+val;
+ if(maskMap.fwd[key])return maskMap.fwd[key];
+ maskMap.seq[kind]=(maskMap.seq[kind]||0)+1;
+ const pfx={customer:"CUSTOMER",requester:"USER",approver:"USER",cm:"CM",invoice:"INV",io:"IO"}[kind]||"REF";
+ const a=pfx+"_"+String(maskMap.seq[kind]).padStart(3,"0");
+ maskMap.fwd[key]=a;maskMap.rev[a]=val;return a;
+}
+function maskContext(ctx){
+ const c=JSON.parse(JSON.stringify(ctx));
+ c.case_id=alias("cm",ctx.case_id);
+ const t=c.current_transaction;
+ t.customer=alias("customer",t.customer);t.requester=alias("requester",t.requester);t.approver=alias("approver",t.approver);
+ t.invoice_dm=alias("invoice",t.invoice_dm);t.internal_order=alias("io",t.internal_order);
+ if(c.cross_transaction)c.cross_transaction.related_credit_ids=(c.cross_transaction.related_credit_ids||[]).map(id=>alias("cm",id));
+ /* evidence strings can carry names/ids; alias the known ones we mapped */
+ const scrub=(s)=>{let out=String(s||"");Object.keys(maskMap.rev).forEach(a=>{const real=maskMap.rev[a];if(real&&out.includes(real))out=out.split(real).join(a);});return out;};
+ (c.deterministic_controls||[]).forEach(h=>h.evidence=scrub(h.evidence));
+ (c.behavioral_signals||[]).forEach(h=>h.evidence=scrub(h.evidence));
+ return c;
+}
+function rehydrate(text){ /* turn aliases back into real identifiers for display */
+ let out=String(text||"");Object.keys(maskMap.rev).forEach(a=>{if(out.includes(a))out=out.split(a).join(maskMap.rev[a]);});return out;
+}
+function rehydrateAssessment(a){
+ if(!a)return a;const c=JSON.parse(JSON.stringify(a));
+ c.case_id=rehydrate(c.case_id);
+ if(c.behavioral_assessment)c.behavioral_assessment.summary=rehydrate(c.behavioral_assessment.summary);
+ (c.signals||[]).forEach(s=>{s.description=rehydrate(s.description);s.supporting_evidence=(s.supporting_evidence||[]).map(rehydrate);});
+ if(c.historical_context){c.historical_context.normal_behavior=rehydrate(c.historical_context.normal_behavior);c.historical_context.observed_deviation=rehydrate(c.historical_context.observed_deviation);}
+ c.reasoning_summary=rehydrate(c.reasoning_summary);
+ c.reviewer_focus=(c.reviewer_focus||[]).map(rehydrate);
+ return c;
+}
+
+/* ================= AI ASSESSMENT (Stage 3 + 4) =================
+   analyzeCase() sends the (optionally masked) context to /api/analyze and returns a validated,
+   rehydrated assessment. If no provider / failure / invalid, returns a LOCAL fallback assessment
+   in the same schema. Deterministic hard-stops override the queue to Investigate either way. */
+let AI={provider:"",model:"",live:false};                 /* set from /api/health */
+const AIMODE={masking:true, forceLocal:false, deployment:"cloud"}; /* deployment: cloud|platform|hybrid|onprem */
+function maskingDefaultFor(dep){return dep!=="onprem";}    /* ON unless genuinely on-prem */
+const LEVEL_FROM_BAND={high:"HIGH",med:"MEDIUM",low:"LOW"};
+const QUEUE_FROM_LEVEL={HIGH:"INVESTIGATE",MEDIUM:"REVIEW",LOW:"STRAIGHT_THROUGH"};
+/* strictness → band thresholds (queue routing only; hard-stops ignore this) */
+const STRICTNESS={lenient:{inv:80,rev:55},balanced:{inv:70,rev:45},strict:{inv:60,rev:35}};
+let strictness="balanced";
+function levelForScore(score){const t=STRICTNESS[strictness];return score>=t.inv?"HIGH":score>=t.rev?"MEDIUM":"LOW";}
+
+function localAssessment(r,allRows){
+ const ctx=buildCaseContext(r,allRows);
+ const score=r.score, level=levelForScore(score);
+ const sigs=r.reasons.map(x=>({type:x.code,severity:RC[x.code].w>=40?"HIGH":RC[x.code].w>=20?"MEDIUM":"LOW",description:RC[x.code].label,supporting_evidence:[x.evidence]}));
+ const cb=ctx.customer_baseline;
+ const dev=cb.ratio_to_median?(cb.ratio_to_median+"x this customer's median ("+peso(cb.median_amount)+")"):"within the customer's usual range";
+ return {
+  case_id:r.id, risk_level:level, ai_risk_score:score, recommended_queue:QUEUE_FROM_LEVEL[level], confidence:0.55,
+  behavioral_assessment:{is_unusual:score>=STRICTNESS[strictness].rev, summary:r.reasons.length?("Fired "+r.reasons.length+" signal(s); "+(topReason(r).toLowerCase())+"."):"No control or pattern fired."},
+  signals:sigs,
+  historical_context:{normal_behavior:cb.historical_transactions+" prior credits, median "+peso(cb.median_amount)+", ~"+cb.normal_monthly_pace+"/mo", observed_deviation:dev},
+  reasoning_summary:r.reasons.length?("Prioritized by deterministic rules and cross-transaction patterns. "+(ctx.cross_transaction.related_exceeds_limit?"Related credits combine over the approval limit. ":"")):"Clean; no signals.",
+  reviewer_focus:r.reasons.slice(0,3).map(x=>"Check: "+RC[x.code].label.toLowerCase()),
+  _source:"local"
+ };
+}
+async function analyzeCase(r,allRows,opts){
+ const ctx=buildCaseContext(r,allRows);
+ const hardStop=ctx.deterministic_controls.some(h=>h.hard_stop);
+ /* local-only path */
+ if(!AI.live||AIMODE.forceLocal){
+  const a=localAssessment(r,allRows);
+  return finalizeAssessment(a,hardStop,"local",null);
+ }
+ const masked=AIMODE.masking && maskingDefaultFor(AIMODE.deployment)!==false; /* ON per deployment */
+ const payloadCtx=masked?maskContext(ctx):ctx;
+ try{
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),60000);
+  const res=await fetch("/api/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({case_id:r.id,masked,context:payloadCtx}),signal:ctrl.signal});
+  clearTimeout(to);
+  const data=await res.json();
+  if(data.status==="ok"&&data.assessment){
+   const a=masked?rehydrateAssessment(data.assessment):data.assessment;
+   a._source="ai";a._audit=data.audit;
+   return finalizeAssessment(a,hardStop,"ai",data.audit);
+  }
+  /* no_provider or unavailable → safe local fallback */
+  const a=localAssessment(r,allRows);a._fallbackReason=(data.status==="unavailable")?(data.reason||"AI unavailable"):"no live provider";
+  return finalizeAssessment(a,hardStop,"local",data.audit||null);
+ }catch(e){
+  const a=localAssessment(r,allRows);a._fallbackReason=(e&&e.name==="AbortError")?"AI timed out":"AI request failed";
+  return finalizeAssessment(a,hardStop,"local",null);
+ }
+}
+/* hard-stops are authoritative: force Investigate and mark it, without discarding the AI reasoning */
+function finalizeAssessment(a,hardStop,source,audit){
+ a.source=source;                       /* "ai" | "local" */
+ a.hard_stop=!!hardStop;
+ if(hardStop){a.recommended_queue="INVESTIGATE";a.risk_level="HIGH";a.hard_stop_note="Mandatory control violation (SoD or approval limit) forces Investigate regardless of the assessment.";}
+ a.lane={INVESTIGATE:"investigate",REVIEW:"review",STRAIGHT_THROUGH:"stp"}[a.recommended_queue]||"review";
+ return a;
+}
+
+/* ---------------- summaries for the model and the local fallback ---------------- */
+function reasonStats(rows){const m={};rows.forEach(r=>r.reasons.forEach(x=>{const s=(m[x.code]||(m[x.code]={code:x.code,n:0,amount:0}));s.n++;s.amount+=r.amount;}));return RC_ORDER.filter(c=>m[c]).map(c=>m[c]).sort((a,b)=>b.amount-a.amount);}
+function splitClusters(rows){const seen=new Set(),out=[];rows.filter(r=>r.reasons.some(x=>x.code==="SPLIT")).forEach(r=>{const key=r.customer+"|"+r.requester+"|"+r.approver;const grp=rows.filter(x=>(x.customer+"|"+x.requester+"|"+x.approver)===key&&x.reasons.some(y=>y.code==="SPLIT")&&Math.abs(x.ms-r.ms)<=7*DAY);const ids=grp.map(x=>x.id).sort().join(",");if(seen.has(ids)||grp.length<3)return;seen.add(ids);out.push({customer:r.customer,requester:r.requester,approver:r.approver,limit:r.limit,n:grp.length,total:sum(grp,x=>x.amount),ids:grp.map(x=>x.id),from:grp.reduce((a,x)=>x.date<a?x.date:a,grp[0].date),to:grp.reduce((a,x)=>x.date>a?x.date:a,grp[0].date)});});return out.sort((a,b)=>b.total-a.total);}
+function dupPairs(rows){const seen=new Set(),out=[];rows.filter(r=>r.reasons.some(x=>x.code==="DUP")).forEach(r=>{r.related.forEach(id=>{const o=rows.find(x=>x.id===id);if(!o||!o.reasons.some(x=>x.code==="DUP"))return;const k=[r.id,o.id].sort().join("|");if(seen.has(k))return;seen.add(k);out.push({a:r,b:o,customer:r.customer,nature:r.nature,amount:Math.max(r.amount,o.amount)});});});return out.sort((a,b)=>b.amount-a.amount);}
+function freqCustomers(rows){const m={};rows.filter(r=>r.reasons.some(x=>x.code==="FREQ")).forEach(r=>{const s=(m[r.customer]||(m[r.customer]={customer:r.customer,n:0,amount:0}));s.n++;s.amount+=r.amount;});return Object.values(m).sort((a,b)=>b.n-a.n);}
+function repeatCustomers(rows){const m={};rows.forEach(r=>{const s=(m[r.customer]||(m[r.customer]={name:r.customer,n:0,amount:0,high:0,flagged:0}));s.n++;s.amount+=r.amount;if(r.band==="high")s.high++;if(r.score>=30)s.flagged+=r.amount;});return Object.values(m).sort((a,b)=>b.flagged-a.flagged||b.n-a.n);}
+function dataSummary(rows){
+ const bands={high:0,med:0,low:0},bandAmt={high:0,med:0,low:0};rows.forEach(r=>{bands[r.band]++;bandAmt[r.band]+=r.amount;});
+ const byNature=groupSum(rows.filter(r=>r.score>=30),"nature").slice(0,8).map(x=>({nature:x.name,flaggedAmt:Math.round(x.amount)}));
+ const byChannel=groupCount(rows,"channel").map(c=>({channel:c.name,n:c.n,high:rows.filter(r=>r.channel===c.name&&r.band==="high").length}));
+ const topCust=repeatCustomers(rows).slice(0,8).map(c=>({customer:c.name,credits:c.n,highRisk:c.high,flaggedAmt:Math.round(c.flagged)}));
+ const splits=splitClusters(rows).slice(0,6).map(s=>({customer:s.customer,requester:s.requester,approver:s.approver,limit:s.limit,credits:s.n,total:Math.round(s.total),from:s.from,to:s.to,ids:s.ids}));
+ const dups=dupPairs(rows).slice(0,6).map(p=>({customer:p.customer,nature:p.nature,a:p.a.id,b:p.b.id,amtA:p.a.amount,amtB:p.b.amount,dateA:p.a.date,dateB:p.b.date}));
+ const freq=freqCustomers(rows).slice(0,5).map(f=>({customer:f.customer,creditsInSpike:f.n,amount:Math.round(f.amount)}));
+ const rs=reasonStats(rows).map(s=>({code:s.code,type:RC[s.code].type,label:RC[s.code].label,credits:s.n,amount:Math.round(s.amount)}));
+ const dec=decisionCounts(rows);
+ const interv=rows.filter(r=>r.intervention).length;
+ return{creditMemos:rows.length,totalAmount:Math.round(sum(rows,r=>r.amount)),bands,bandAmount:{high:Math.round(bandAmt.high),med:Math.round(bandAmt.med),low:Math.round(bandAmt.low)},reasons:rs,byNature,byChannel,topCustomers:topCust,splitClusters:splits,duplicatePairs:dups,frequencySpikes:freq,reviewDecisions:dec,priorInterventions:interv,note:"Scores are a prioritization aid computed by rules and pattern analytics with illustrative weights. A score is not a fraud determination. Interventions are operational exceptions, not fraud labels."};
+}
+const compactRows=(rows)=>rows.slice().sort((a,b)=>b.score-a.score).slice(0,25).map(r=>({id:r.id,d:r.date,ch:r.channel==="General Trade"?"GT":"MT",bu:r.bu,cust:r.customer,nat:r.nature,amt:r.amount,req:r.requester,apr:r.approver,lim:r.limit,score:r.score,band:r.band,reasons:r.reasons.map(x=>x.code),status:statusOf(r)}));
+/* ---------------- avatars ---------------- */
+const PM_AVATARS=[["#2563EB","#fff"],["#4F46E5","#fff"],["#7C3AED","#fff"],["#9333EA","#fff"],["#DB2777","#fff"],["#E11D48","#fff"],["#0F766E","#fff"],["#0E7490","#fff"],["#0369A1","#fff"],["#047857","#fff"],["#B45309","#fff"],["#475569","#fff"]];
+function hashIdx(str,n){let h=0;const t=String(str);for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))>>>0;return h%n;}
+function avatarHTML(name,size=32){const p=PM_AVATARS[hashIdx(name,PM_AVATARS.length)];const ini=String(name).split(" ").filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase();return `<span class="avatar" style="width:${size}px;height:${size}px;background:${p[0]};color:${p[1]};font-size:${Math.round(size*0.36)}px">${esc(ini)}</span>`;}
+const daysBadgeClass=(dl)=>dl<=30?"daybadge chip-amber":dl<=90?"daybadge chip-amber":"daybadge chip-slate";
+const daysBadgeStyle=(dl)=>dl<=30?"background:#fee2e2;color:#b91c1c":dl<=90?"background:#fef3c7;color:#b45309":"background:#f1f5f9;color:#475569";
+
+
+/* ---------------- AI backend (same proxy contract as Spend Master) ---------------- */
+const MODELS=["claude-opus-4-8","claude-sonnet-4-6"];
+let BACKEND=false;
+async function completeWithFallback(system,messages,web){
+ if(!BACKEND){var ne=new Error("no AI key configured");ne.noKey=true;throw ne;}
+ let lastErr;
+ for(const model of MODELS){
+  const ctrl=new AbortController();const to=setTimeout(()=>ctrl.abort(),60000);
+  try{
+   const res=await fetch("/api/complete",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model,max_tokens:1400,system,messages,web:!!web}),signal:ctrl.signal});
+   clearTimeout(to);
+   const data=await res.json();
+   if(!res.ok||data.type==="error"||!Array.isArray(data.content))throw new Error((data&&data.error&&data.error.message)||("Request failed ("+res.status+")"));
+   return{text:data.content.filter(b=>b.type==="text").map(b=>b.text).join("\n"),model:(data.model||model)};
+  }catch(e){clearTimeout(to);lastErr=(e&&e.name==="AbortError")?new Error("the model did not respond in time"):e;}
+ }
+ throw lastErr||new Error("Request failed");
+}
+const FOCUS_LABEL={dup:"duplicate, similar, or repeated claims",split:"deduction or claim splitting under approval limits",beh:"unusual transactional behavior (amount, frequency, timing)",rules:"deterministic control hits (SoD, promo approval validity, IO status, attachments, limits)"};
+const ANALYST_RULES="Every credit memo carries a risk score from 0 to 100 computed locally by deterministic control rules and cross-transaction pattern analytics, with reason codes. Reason type rule means a control that should have stopped the request at the gate; type pattern means a cross-transaction signal. A score is a prioritization aid, never a determination that fraud occurred, and you must never state or imply that a person or customer committed fraud. Prior interventions are operational exceptions (wrong IO, missing details, missing attachments), not fraud labels. Refer to credit memos by their CM id, customers, requesters, and approvers exactly as named. Report amounts in pesos (\u20b1). Surface evidence and what a reviewer should check next; the determination stays with the Financial Shared Services reviewer, BU Finance, and Internal Audit.";
+function parseFindings(text){
+ var clean=String(text).replace(/```json|```/g,"").trim();
+ try{var p=JSON.parse(clean);if(p&&Array.isArray(p.findings))return p.findings;if(Array.isArray(p))return p.filter(function(o){return o&&o.title&&o.detail;});}catch(e){}
+ var fm=clean.match(/"findings"\s*:\s*\[[\s\S]*?\]/);
+ if(fm){try{var q=JSON.parse("{"+fm[0]+"}");if(q&&Array.isArray(q.findings))return q.findings;}catch(e){}}
+ var out=[];var re=/\{[^{}]*"detail"[^{}]*\}/g;var m;
+ while((m=re.exec(clean))){try{var o=JSON.parse(m[0]);if(o&&o.title&&o.detail)out.push(o);}catch(e){}}
+ return out;
+}
+async function runAnalysis(a){
+ const system="You are a Financial Shared Services controls analyst for a large diversified group reviewing Credit Memo (AR deduction) risk scores with an accounting reviewer. You are limited to the authorized data provided below and must not reference anything outside it. "+ANALYST_RULES+" Be concise.";
+ const userMsg="Authorized scope: "+a.dataScope+" | Period: "+a.timeLabel+" ("+a.count+" credit memos, "+peso(a.total)+" total).\nFocus areas: "+a.focusLabels+"."+(a.note?"\nReviewer's own words: "+a.note:"")+"\nAggregated summary over all authorized rows (amounts in PHP):\n"+JSON.stringify(dataSummary(a.rows))+"\nTop-scored credit memos (ch=GT General Trade / MT National Chains, lim=approver limit):\n"+JSON.stringify(compactRows(a.rows))+filesContext()+'\n\nReturn at most 4 findings, most important first. Keep each detail to ONE concise sentence under 30 words naming CM ids, customers, or requesters and figures. Return ONLY valid JSON, no markdown fences, shaped as:\n{"findings":[{"area":"duplicate|splitting|behavior|rules|review-load","title":"short label","severity":"low|medium|high","detail":"one concise sentence with specific figures and exact names","metric":"one headline number, e.g. 6 credits or \u20b1420k"}]}';
+ const {text,model}=await completeWithFallback(system,[{role:"user",content:userMsg}]);
+ return{findings:parseFindings(text),model};
+}
+function localAnalysis(rows,picked){
+ const findings=[];const money=(n)=>peso(Math.round(n));
+ if(picked.includes("dup")){const dp=dupPairs(rows);if(dp.length)findings.push({area:"duplicate",title:"Near-duplicate credits",severity:dp.length>=3?"high":"medium",detail:dp.length+" pairs share a customer, nature, and amount within 1% inside 10 days: "+dp.slice(0,3).map(p=>p.a.id+" and "+p.b.id+" ("+p.customer+", "+money(p.amount)+")").join("; ")+". Check whether the second credit is the same underlying claim under a new invoice reference.",metric:dp.length+" pairs"});else findings.push({area:"duplicate",title:"Near-duplicate credits",severity:"low",detail:"No pair of credits to the same customer matched on nature, amount, and timing in this window.",metric:"0 pairs"});}
+ if(picked.includes("split")){const sc=splitClusters(rows);if(sc.length)findings.push({area:"splitting",title:"Sub-limit clusters over the approval limit",severity:"high",detail:sc.slice(0,3).map(s=>s.n+" credits to "+s.customer+" by "+s.requester+" ("+s.from+" to "+s.to+") each under "+money(s.limit)+" but totalling "+money(s.total)).join("; ")+". Individually compliant, collectively above the limit; worth a single combined approval review.",metric:sc.length+" clusters"});else findings.push({area:"splitting",title:"Sub-limit clusters",severity:"low",detail:"No group of same-requester credits inside 7 days summed over its approval limit in this window.",metric:"0 clusters"});}
+ if(picked.includes("beh")){const fq=freqCustomers(rows);const am=rows.filter(r=>r.reasons.some(x=>x.code==="AMT")).sort((a,b)=>b.amount-a.amount);const parts=[];if(fq.length)parts.push(fq.slice(0,2).map(f=>f.customer+" received "+f.n+" credits in a 30-day spike").join("; "));if(am.length)parts.push(am.slice(0,2).map(r=>r.id+" for "+r.customer+" is "+money(r.amount)+", well above the customer's median").join("; "));
+  findings.push({area:"behavior",title:"Unusual frequency and amounts",severity:(fq.length||am.length)?"medium":"low",detail:parts.length?parts.join(". ")+". Frequency and size outliers are where a one-transaction-at-a-time review is weakest.":"Credit frequency and amounts look consistent with each customer's usual pattern.",metric:(fq.length+am.length)+" signals"});}
+ if(picked.includes("rules")){const rs=reasonStats(rows).filter(s=>RC[s.code].type==="rule");const n=rows.filter(hasRule).length;if(n)findings.push({area:"rules",title:"Control hits that should have stopped at the gate",severity:n>=8?"high":"medium",detail:n+" credits carry a deterministic control hit: "+rs.slice(0,4).map(s=>RC[s.code].label.toLowerCase()+" ("+s.n+")").join(", ")+". These are rule checks, not AI; they belong in the eRFCM entry gate and posting gate.",metric:n+" credits"});else findings.push({area:"rules",title:"Control hits",severity:"low",detail:"No deterministic control rule fired in this window.",metric:"0"});}
+ const high=rows.filter(r=>r.band==="high");const open=high.filter(r=>statusOf(r)==="Open");
+ if(rows.length&&findings.length<4)findings.push({area:"review-load",title:"Review load",severity:"low",detail:high.length+" of "+rows.length+" credits ("+pct(rows.length?high.length/rows.length*100:0)+") score high; "+open.length+" of those are still unreviewed. Working the queue top-down covers "+money(sum(high,r=>r.amount))+" of exposure first.",metric:high.length+" high"});
+ return{findings,model:"computed locally"};
+}
+
+/* ---------------- state ---------------- */
+const BATCH={rows:0,at:new Date().toLocaleString("en-PH",{dateStyle:"medium",timeStyle:"short"})};
+const _seed=generateData();BATCH.rows=_seed.length;
+const state={rows:scoreAll(_seed),roleId:"reviewer",view:"overview",range:"all",dashRange:"all",analysis:null,compMode:"value",files:[],decisions:{},loaded:new Set(),assessments:{},run:null,qfilter:{lane:"investigate",reason:"all",q:""},qsort:{key:"score",dir:-1},qlimit:25};
+seedPipeline();
+const role=()=>ROLES.find(r=>r.id===state.roleId)||ROLES[0];
+const scopedRows=()=>scopeRows(state.rows,role());
+/* lanes: only credits that have been processed by a run */
+function viewRows(){return scopedRows().filter(isLoaded);}
+/* overview: all raw credits the role may see, filtered by the dashboard quick-view range */
+function overviewRows(){const rows=scopedRows();if(state.dashRange==="all")return rows;const cutoff=Date.now()-state.dashRange*DAY;return rows.filter(r=>r.ms>=cutoff);}
+const rangeLabel=()=>state.range==="all"?"all time":state.range===30?"last 30 days":state.range===90?"last 90 days":state.range===180?"last 6 months":"last 12 months";
+const dashRangeLabel=()=>state.dashRange==="all"?"all time":state.dashRange===30?"last 30 days":state.dashRange===90?"last 90 days":state.dashRange===180?"last 6 months":"last 12 months";
+function statusOf(r){const d=state.decisions[r.id];return d?d.decision:"Open";}
+/* Seed a completed run so the app shows a populated state on load: the last run processed all credits
+   into lanes, and a subset already has decisions (Decided populated). Demo only. */
+function seedPipeline(){
+ const rng=mulberry32(424242);
+ /* pre-scored demo state: every credit gets a LOCAL assessment (Load Demo Results / backup path) */
+ state.rows.forEach(r=>{
+  state.loaded.add(r.id);
+  const hard=r.reasons.some(x=>RULE_HARD(x.code));
+  state.assessments[r.id]=finalizeAssessment(localAssessment(r,state.rows),hard,"local",null);
+ });
+ state.run={label:"all time",days:"all",count:state.rows.length,total:sum(state.rows,r=>r.amount),at:BATCH.at,mode:"local",provider:"",model:"",liveAssessed:0,demoSeed:true};
+ state.rows.forEach(r=>{
+  if(statusOf(r)!=="Open")return;
+  const l=routeLane(r);
+  if((l==="investigate"||l==="review")&&rng()<0.28){
+   const rl=rng();const dec=rl<0.5?"Cleared":(rl<0.72?"Confirmed":"Escalated");
+   const authorized=(dec==="Cleared"&&rng()<0.35);
+   state.decisions[r.id]={decision:dec,note:authorized?"Confirmed with BU Finance; approved for this activity.":"",authorized,by:"FS Reviewer",at:"Sep 6, 2026, 4:12 PM",seeded:true};
+  }
+ });
+}
+function decisionCounts(rows){const c={Open:0,Cleared:0,Confirmed:0,Escalated:0};rows.forEach(r=>{c[statusOf(r)]=(c[statusOf(r)]||0)+1;});return c;}
+function computeStats(rows){const total=sum(rows,r=>r.amount);const high=rows.filter(r=>r.band==="high");const med=rows.filter(r=>r.band==="med");const ruleHits=rows.filter(hasRule);const reviewed=high.filter(r=>statusOf(r)!=="Open");const dc=decisionCounts(high);const lc=laneCounts(rows);return{total,txns:rows.length,high:high.length,highAmt:sum(high,r=>r.amount),med:med.length,medAmt:sum(med,r=>r.amount),highPct:rows.length?high.length/rows.length*100:0,ruleHits:ruleHits.length,ruleAmt:sum(ruleHits,r=>r.amount),reviewed:reviewed.length,dc,customers:new Set(rows.map(r=>r.customer)).size,interv:rows.filter(r=>r.intervention).length,lc};}
+
+/* ---------------- chart registry ---------------- */
+let charts=[];
+function destroyCharts(){charts.forEach(c=>{try{c.destroy();}catch(e){}});charts=[];}
+const chartBase={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:(c)=>peso(c.raw)}}}};
+const truncLabel=(s,max=20)=>{s=String(s);return s.length>max?s.slice(0,max-1)+"\u2026":s;};
+function donut(ctx,labels,data,colors,fmt){return new Chart(ctx,{type:"doughnut",data:{labels,datasets:[{data,backgroundColor:colors,borderWidth:0,cutout:"72%"}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{displayColors:false,padding:10,callbacks:{label:(c)=>c.label+": "+(fmt?fmt(c.raw):c.raw)}}}}});}
+function hbar(ctx,labels,data,colors){return new Chart(ctx,{type:"bar",data:{labels,datasets:[{data,backgroundColor:colors,borderRadius:4,barThickness:"flex",maxBarThickness:22}]},options:Object.assign({indexAxis:"y"},chartBase,{scales:{x:{ticks:{callback:v=>pesoCompact(v),color:"#94a3b8",font:{size:11}},grid:{color:"#f1f5f9"},border:{display:false}},y:{ticks:{color:"#64748b",font:{size:11},autoSkip:false,callback:function(v){return truncLabel(this.getLabelForValue(v),22);}},grid:{display:false},border:{display:false}}}})});}
+function area2(ctx,labels,a,b){return new Chart(ctx,{type:"line",data:{labels,datasets:[{label:"All credits",data:a,borderColor:"#2563eb",backgroundColor:"rgba(37,99,235,.12)",fill:true,tension:.35,pointRadius:0,pointHoverRadius:4,borderWidth:2},{label:"High-risk credits",data:b,borderColor:"#e11d48",backgroundColor:"rgba(225,29,72,.10)",fill:true,tension:.35,pointRadius:0,pointHoverRadius:4,borderWidth:2}]},options:Object.assign({},chartBase,{interaction:{mode:"index",intersect:false},plugins:{legend:{display:true,position:"top",align:"end",labels:{boxWidth:10,boxHeight:10,usePointStyle:true,font:{size:11},color:"#64748b"}},tooltip:{mode:"index",intersect:false,displayColors:true,padding:10,callbacks:{label:(c)=>c.dataset.label+": "+peso(c.raw)}}},scales:{x:{ticks:{color:"#94a3b8",font:{size:11},maxTicksLimit:8,autoSkip:true},grid:{display:false},border:{display:false}},y:{ticks:{callback:v=>pesoCompact(v),color:"#94a3b8",font:{size:11}},grid:{color:"#f1f5f9"},border:{display:false}}}})});}
+
+/* ---------------- small html builders ---------------- */
+function kpiHTML(icon,tone,label,value,sub){return `<div class="card2 kpi"><span class="ichip ic-${tone}">${icon}</span><div class="kpi-label">${esc(label)}</div><div class="kpi-value tnum">${value}</div>${sub?`<div class="kpi-sub">${sub}</div>`:""}</div>`;}
+function segHTML(data,total){return `<div class="seg">${data.map(d=>{const pp=total?d.amount/total*100:0;return `<span class="segpart" data-name="${escA(d.name)}" data-val="${escA(peso(d.amount))}" data-pct="${pp.toFixed(1)}%" style="flex-basis:${pp}%;background:${d.fill}"></span>`;}).join("")}</div>`;}
+const scoreHTML=(r)=>{const s=shownScore(r),bnd=shownBand(r);const a=assessmentOf(r);const dot=a?(a.source==="ai"?'<span class="ai-dot ai-dot-live" title="Live AI assessment"></span>':'<span class="ai-dot ai-dot-local" title="Local assessment"></span>'):"";return `<span class="score score-${bnd} tnum" title="${escA(BAND_LABEL[bnd]+" risk"+(a?(a.source==="ai"?" (AI)":" (local)"):""))}">${dot}${s}</span>`;};
+const bandHTML=(r)=>`<span class="band band-${r.band}"><span class="dot" style="background:${BAND_COLOR[r.band]};height:8px;width:8px"></span>${BAND_LABEL[r.band]}</span>`;
+function statusPillHTML(r){const s=statusOf(r);const cls={Open:"pill-open",Cleared:"pill-cleared",Confirmed:"pill-confirmed",Escalated:"pill-escalated"}[s]||"pill-open";return `<span class="pill ${cls}">${esc(s)}</span>`;}
+const rcHTML=(code)=>`<span class="rcode rc-${RC[code].type}" title="${escA(RC[code].label)}">${esc(code.replace("_"," "))}</span>`;
+
+/* ---------------- shared shell ---------------- */
+function navFor(r){
+ const items=[["overview","Overview",IC.dash],["queue","Work queue",IC.list]];
+ if(can("controls"))items.push(["controls","Controls & prevention",IC.shield]);
+ items.push(["customers","Customers & requesters",IC.building]);
+ if(can("tuning"))items.push(["tuning","Rules & tuning",IC.gear]);
+ return items;
+}
+function shellHTML(active,title,sub,actionsHTML,bodyHTML){
+ const r=role();const nav=navFor(r);
+ const sidebar=`<aside class="sidebar">
+   <div style="height:56px;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--pm-border-subtle)"><span class="brand"><span class="logo">${IC.shield}</span>Fraud Master</span></div>
+   <nav style="flex:1;overflow:auto;padding:12px"><div class="navlabel">Work</div>
+   ${nav.map(n=>`<button class="navitem ${active===n[0]?"active":""}" data-action="go" data-view="${n[0]}"><span class="ic">${n[2]}</span>${n[1]}</button>`).join("")}
+   <div class="navlabel" style="margin-top:16px">Concept</div><button class="navitem" data-action="about"><span class="ic">${IC.info}</span>About Fraud Master</button>
+   </nav>
+   <div style="height:56px;display:flex;align-items:center;gap:8px;padding:0 16px;border-top:1px solid var(--pm-border-subtle)"><span class="ichip ic-indigo" style="height:32px;width:32px">${IC.shield}</span><div style="min-width:0"><div style="font-size:12px;font-weight:500;color:#334155">Financial Shared Services</div><div style="font-size:11px;color:var(--pm-text-muted)">${esc(r.label)}</div></div></div>
+ </aside>`;
+ const roleSel=`<div class="d-none d-md-flex align-items-center gap-2" style="border:1px solid var(--pm-border-default);border-radius:8px;padding:4px 4px 4px 12px"><span style="color:var(--pm-primary);display:flex">${IC.shield}</span><select id="roleSel" class="form-select form-select-sm border-0 shadow-none" style="width:auto;font-size:14px;background-position:right .3rem center" aria-label="Change your role">${ROLES.map(x=>`<option value="${x.id}" ${x.id===state.roleId?"selected":""}>${esc(x.label)}</option>`).join("")}</select></div>`;
+ const runMode=state.run?(state.run.mode==="ai"?` \u00b7 Live AI (${esc(state.run.provider||"provider")})`:` \u00b7 Local ${state.run.demoSeed?"demo":"fallback"} assessment`):"";
+ const runInfo=state.run?`Last run ${esc(state.run.at)} \u00b7 ${state.run.count.toLocaleString()} credit memos \u00b7 ${esc(state.run.label)}${runMode}`:`No run yet \u00b7 ${BATCH.rows.toLocaleString()} credits available`;
+ const runBtn=`<button class="btnx btn-brand" data-action="run-analysis">${IC.sparkles} Run analysis</button>`;
+ const topbar=`<header class="topbar"><div style="padding:0 24px;height:64px" class="d-flex align-items-center justify-content-between gap-3">
+   <div style="min-width:0"><div class="d-flex align-items-center gap-2 text-muted2" style="font-size:12px">${IC.file} ${runInfo} \u00b7 mock data</div><div style="font-size:16px;font-weight:600;letter-spacing:-.01em" class="text-truncate">${esc(title)}${sub?` <span class="text-muted2" style="font-size:13px;font-weight:400">\u00b7 ${esc(sub)}</span>`:""}</div></div>
+   <div class="d-flex align-items-center gap-2">${roleSel}<button class="btnx btn-soft d-none d-sm-inline-flex" data-action="ask">${IC.msg} Ask your data</button>${actionsHTML||""}${runBtn}</div>
+ </div></header>`;
+ return `<div class="app">${sidebar}<div class="content">${topbar}<main style="padding:24px">${bodyHTML}</main></div></div>`;
+}
+
+/* ---------------- OVERVIEW screen (raw SAP data, quick-view filter) ---------------- */
+function overviewScreenHTML(){
+ const all=overviewRows();
+ const total=sum(all,r=>r.amount);
+ const byNature=groupSum(all,"nature");
+ const byChannel=groupCount(all,"channel");
+ const natTotal=sum(byNature,x=>x.amount);
+ const loadedInView=all.filter(isLoaded).length;
+ const notLoaded=all.length-loadedInView;
+ const recent=all.slice().sort((a,b)=>b.ms-a.ms).slice(0,8);
+ const ranges=[[30,"30D"],[90,"90D"],[180,"6M"],[365,"12M"],["all","All"]];
+ const rangeCtl=`<div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2"><div style="font-size:14px;color:#64748b">Showing <span style="color:#334155;font-weight:500">${dashRangeLabel()}</span> of raw credit memos <span class="text-muted2">\u00b7 quick view only; choose what to score with Run analysis</span></div><div class="seg-ctl" role="group" aria-label="Quick view timeframe">${ranges.map(x=>`<button class="${state.dashRange===x[0]?"on":""}" data-action="dash-range" data-range="${x[0]}">${x[1]}</button>`).join("")}</div></div>`;
+ const kpis=`<div class="row g-3 mb-3">
+   <div class="col-6 col-xl-3">${kpiHTML(IC.file,"indigo","Credit memos",all.length.toLocaleString(),pesoCompact(total)+" total")}</div>
+   <div class="col-6 col-xl-3">${kpiHTML(IC.building,"sky","Customers",new Set(all.map(r=>r.customer)).size,"in this view")}</div>
+   <div class="col-6 col-xl-3">${kpiHTML(IC.list,"indigo","Natures",byNature.length,byChannel.map(c=>c.name.replace("MT National Chains","MT")).join(" \u00b7 "))}</div>
+   <div class="col-6 col-xl-3">${kpiHTML(IC.check,"emerald","Scored in a run",loadedInView.toLocaleString(),notLoaded>0?notLoaded.toLocaleString()+" not yet scored":"all scored")}</div>
+ </div>`;
+ const natCard=`<div class="card2"><div class="card2-head"><div class="card2-title">Credit volume by nature</div><span class="text-muted2" style="font-size:12px">amount</span></div>
+   <div class="chwrap" style="height:230px"><canvas id="ovNat"></canvas></div></div>`;
+ const multiChannel=byChannel.length>1;
+ const sideTitle=multiChannel?"By channel":"By business unit";
+ const sideGroups=multiChannel?byChannel.map(c=>({name:c.name,n:c.n,amount:sum(all.filter(r=>r.channel===c.name),r=>r.amount)})):groupCount(all,"bu").map(g=>({name:g.name,n:g.n,amount:sum(all.filter(r=>r.bu===g.name),r=>r.amount)}));
+ const sidePalette=["#2563eb","#10b981","#8b5cf6","#f59e0b","#ec4899","#14b8a6"];
+ const chanCard=`<div class="card2"><div class="card2-head"><div class="card2-title">${sideTitle}</div><span class="ichip ic-sky">${IC.building}</span></div>
+   <div class="chwrap" style="height:150px;position:relative"><canvas id="ovChan"></canvas></div>
+   <div style="margin-top:14px" class="d-flex flex-column gap-2">${sideGroups.map((c,i)=>`<div class="d-flex align-items-center justify-content-between" style="font-size:14px"><span class="d-flex align-items-center gap-2 text-sec"><span class="dot" style="background:${sidePalette[i%sidePalette.length]}"></span>${esc(c.name)}</span><span class="tnum" style="color:#0f172a">${c.n.toLocaleString()} \u00b7 ${pesoCompact(c.amount)}</span></div>`).join("")}</div></div>`;
+ const recentCard=`<div class="card2"><div class="card2-head"><div class="card2-title">Recent credit memos</div><span class="text-muted2" style="font-size:12px">latest ${recent.length}</span></div>
+   <div style="overflow-x:auto;border:1px solid #f1f5f9;border-radius:8px"><table class="table table-sm mb-0 qtbl"><caption class="visually-hidden">Recent credit memos</caption><thead><tr><th>Credit memo</th><th>Posted</th><th>Customer</th><th>Nature</th><th class="text-end">Amount</th><th>Requester</th><th>State</th></tr></thead><tbody>${recent.map(r=>`<tr><td style="font-weight:600;color:#0f172a">${esc(r.id)}</td><td class="text-muted2">${r.date}</td><td class="text-truncate" style="max-width:200px" title="${escA(r.customer)}">${esc(r.customer)}</td><td class="text-muted2 text-truncate" style="max-width:150px">${esc(r.nature)}</td><td class="text-end tnum">${peso(r.amount)}</td><td class="text-muted2">${esc(r.requester)}</td><td>${isLoaded(r)?`<span class="pill pill-cleared">Scored</span>`:`<span class="pill" style="background:#f1f5f9;color:#64748b">Raw</span>`}</td></tr>`).join("")}</tbody></table></div>
+   <div class="text-muted2 mt-2" style="font-size:12px">This is the raw SAP extract as data. Risk scores and lanes appear only after you Run analysis on a chosen historical range.</div></div>`;
+ const runPrompt=state.run
+  ?`<div class="guard mb-3">${IC.info}<span>Last run scored <b>${state.run.count.toLocaleString()}</b> credit memos (${esc(state.run.label)}). Open the <button class="lnk" data-action="go" data-view="queue" style="font-weight:600">work queue</button> to act on them, or Run analysis again over a different range.</span></div>`
+  :`<div class="card2 mb-3" style="border-color:#c7d2fe;background:#eef2ff"><div class="d-flex align-items-center gap-3 flex-wrap"><span class="ichip ic-indigo" style="background:var(--pm-primary);color:#fff;flex:0 0 auto">${IC.sparkles}</span><div style="flex:1;min-width:220px"><div style="font-size:15px;font-weight:600;color:#0f172a">No run yet</div><div class="text-sec" style="font-size:13px;margin-top:2px">Pick a historical range and score it. Flagged credits route into Investigate, Review, and Straight-through for you to work.</div></div><button class="btnx btn-brand" data-action="run-analysis">${IC.sparkles} Run analysis</button></div></div>`;
+ const bento=`<div class="row g-3"><div class="col-12 col-xl-8"><div class="d-flex flex-column gap-3">${natCard}${recentCard}</div></div><div class="col-12 col-xl-4">${chanCard}</div></div>`;
+ return shellHTML("overview","Consolidated credit memos",role().note,"",`${rangeCtl}${runPrompt}${kpis}${bento}`);
+}
+function initOverviewCharts(){
+ destroyCharts();const all=overviewRows();
+ const byNat=groupSum(all,"nature").slice(0,9);const nc=document.getElementById("ovNat");if(nc)charts.push(hbar(nc,byNat.map(x=>x.name),byNat.map(x=>x.amount),byNat.map((x,i)=>NATURE_COLORS[i%NATURE_COLORS.length])));
+ const byChan=groupCount(all,"channel");const cc=document.getElementById("ovChan");
+ if(cc){const pal=["#2563eb","#10b981","#8b5cf6","#f59e0b","#ec4899","#14b8a6"];const g=byChan.length>1?byChan:groupCount(all,"bu");charts.push(donut(cc,g.map(c=>c.name),g.map(c=>c.n),g.map((c,i)=>pal[i%pal.length]),(v)=>v+" credits"));}
+}
+
+/* ---------------- RUN ANALYSIS modal ---------------- */
+const RUN_WINDOWS=[[30,"Last 30 days","Recent postings"],[60,"Last 60 days","Short-term trend"],[90,"Last 90 days","This quarter"],[180,"Last 6 months","Half-year sweep"],["all","All time","Everything on record"]];
+const RUN_MSGS=["Pulling the authorized credit memos","Applying control rules","Scoring cross-transaction patterns","Grouping duplicates and split clusters","Routing into lanes"];
+let runState={step:0,win:"all",custom:"",customMode:false,progress:0,msg:0};
+let runToken=0;
+function openRun(){runState={step:0,win:"all",custom:"",customMode:false,progress:0,msg:0};renderRun();}
+function runFiltered(){const rows=scopedRows();let days=runState.customMode?(+runState.custom||0):runState.win;if(days==="all")return rows;const cut=Date.now()-days*DAY;return rows.filter(r=>r.ms>=cut);}
+function runLabel(){return runState.customMode?("last "+(+runState.custom||0)+" days"):(runState.win==="all"?"all time":RUN_WINDOWS.find(w=>w[0]===runState.win)[1].toLowerCase());}
+const RUN_STAGES=["Loading authorized transactions","Building historical behavioral context","Checking deterministic controls","Preparing AI assessment","Applying data protection / masking","Sending to preferred LLM","Receiving AI risk assessments","Validating responses","Routing cases","Analysis complete"];
+function renderRun(){
+ const ds=dataScopeLabel(role());
+ const modeLine=AI.live?`Live AI assessment via ${esc(AI.provider)}${AI.model?" ("+esc(AI.model)+")":""}`:"Local demo / fallback assessment (no live model configured)";
+ let inner="";
+ if(runState.step===0){
+  inner=`<h5 style="font-weight:600;margin:0">Which credit memos should I assess?</h5><p class="text-sec" style="font-size:14px;margin-top:8px">Pick the historical range. Fraud Master prepares the behavioral context for each case (${esc(ds)}), the preferred LLM assesses whether the behavior looks unusual, and the cases route into the lanes. The reviewer makes the final decision.</p>
+   <div class="d-flex align-items-center gap-2 mt-2 mb-1" style="font-size:12px"><span class="dot" style="background:${AI.live?"#10b981":"#94a3b8"}"></span><span class="text-sec">${modeLine}</span></div>
+   <div class="row g-2 mt-1">${RUN_WINDOWS.map(w=>{const on=!runState.customMode&&runState.win===w[0];return `<div class="col-6"><button class="w-100 text-start" data-action="run-win" data-win="${w[0]}" style="border:1px solid ${on?"var(--pm-primary)":"var(--pm-border-subtle)"};background:${on?"var(--pm-primary-subtle)":"#fff"};border-radius:12px;padding:12px"><div style="font-size:14px;font-weight:500">${w[1]}</div><div class="text-muted2" style="font-size:12px;margin-top:4px">${w[2]}</div></button></div>`;}).join("")}
+    <div class="col-12"><button class="w-100 text-start" data-action="run-custom" style="border:1px solid ${runState.customMode?"var(--pm-primary)":"var(--pm-border-subtle)"};background:${runState.customMode?"var(--pm-primary-subtle)":"#fff"};border-radius:12px;padding:12px"><div style="font-size:14px;font-weight:500">Custom range</div><div class="text-muted2" style="font-size:12px;margin-top:4px">Choose your own number of days</div></button>${runState.customMode?`<div class="d-flex align-items-center gap-2 mt-2"><input class="inp" id="run-days" type="number" min="1" value="${escA(runState.custom)}" placeholder="e.g. 45" style="width:112px"><span class="text-sec" style="font-size:14px">days back</span></div>`:""}</div>
+   </div>
+   <div class="d-flex align-items-center justify-content-between mt-4"><div class="text-muted2" style="font-size:12px">${runFiltered().length.toLocaleString()} credits in range</div><button class="btnx btn-brand" data-action="run-go">${IC.sparkles} Analyze data</button></div>`;
+ }else{
+  const st=runState.stage||0;
+  const list=RUN_STAGES.map((label,i)=>{
+   const done=i<st, active=i===st;
+   const icon=done?`<span style="color:#10b981;display:inline-flex">${IC.check}</span>`:active?`<span class="spin" style="width:14px;height:14px;border-width:2px"></span>`:`<span style="width:14px;height:14px;border-radius:999px;border:2px solid #e2e8f0;display:inline-block"></span>`;
+   const skip=(!AI.live||AIMODE.forceLocal)&&(i===4||i===5||i===6);
+   return `<div class="d-flex align-items-center gap-2" style="padding:3px 0;opacity:${skip?0.4:(i<=st?1:0.5)}"><span style="width:16px;display:inline-flex;justify-content:center">${icon}</span><span style="font-size:13px;color:${active?"#0f172a":"#475569"};font-weight:${active?600:400}">${label}${skip?" (skipped, local mode)":""}</span></div>`;
+  }).join("");
+  inner=`<div style="padding:6px 2px"><div style="height:8px;background:#f1f5f9;border-radius:999px;overflow:hidden;margin-bottom:16px"><div style="height:100%;background:var(--pm-primary);width:${runState.progress}%;transition:width .2s"></div></div>${list}<div class="text-muted2 mt-2" style="font-size:12px">${Math.round(runState.progress)}% \u00b7 ${runFiltered().length.toLocaleString()} credits \u00b7 ${AI.live&&!AIMODE.forceLocal?"live assessment":"local assessment"}</div></div>`;
+ }
+ const stepTxt=runState.step===0?"Choose the range":"Analyzing";
+ openModal(`<div class="ov-pad"><div class="d-flex align-items-center gap-3 mb-3"><span class="ichip ic-indigo" style="background:var(--pm-primary);color:#fff">${IC.sparkles}</span><div style="flex:1"><div style="font-size:14px;font-weight:600">Analyze data</div><div class="text-muted2" style="font-size:12px">${stepTxt} \u00b7 ${esc(ds)}</div></div>${runState.step===0?`<button class="btnx btn-ghost" data-action="close-modal" style="padding:4px">${IC.x}</button>`:""}</div>${inner}</div>`);
+}
+async function runGo(){
+ const token=++runToken;runState.step=1;runState.progress=4;runState.stage=0;renderRun();
+ const filtered=runFiltered();const days=runState.customMode?(+runState.custom||0):runState.win;const label=runLabel();
+ const setStage=(i,pct)=>{if(token!==runToken)return;runState.stage=i;runState.progress=pct;renderRun();};
+ /* Stage 1-3: load + build context + controls (already computed at scoreAll; we surface the steps) */
+ setStage(0,8); await sleep(180);
+ setStage(1,18); await sleep(200);
+ setStage(2,26); await sleep(180);
+ setStage(3,34); await sleep(150);
+ /* Stage 4-8: per-case AI (or local) assessment. Cap live calls for the demo to stay in rate limits. */
+ const openCases=filtered.filter(r=>statusOf(r)==="Open");
+ const CAP=AI.live&&!AIMODE.forceLocal?24:openCases.length; /* live: assess the top-risk subset, rest local */
+ const ordered=openCases.slice().sort((a,b)=>b.score-a.score);
+ setStage(4,42); await sleep(150);
+ if(AI.live&&!AIMODE.forceLocal){setStage(5,50);await sleep(120);}
+ let done=0;const totalToDo=ordered.length;
+ for(let i=0;i<ordered.length;i++){
+  if(token!==runToken)return;
+  const r=ordered[i];
+  const useLive=AI.live&&!AIMODE.forceLocal&&i<CAP;
+  const a=useLive?await analyzeCase(r,state.rows):finalizeAssessment(localAssessment(r,state.rows),buildCaseContext(r,state.rows).deterministic_controls.some(h=>h.hard_stop),"local",null);
+  state.assessments[r.id]=a;
+  done++;
+  if(done%6===0||done===totalToDo){setStage(useLive?6:4, 50+Math.round(40*done/Math.max(1,totalToDo)));await sleep(0);}
+ }
+ setStage(7,92); await sleep(160);   /* validating */
+ setStage(8,97); await sleep(160);   /* routing */
+ if(token!==runToken)return;
+ /* replace this scope's open loaded set with the range; keep decided credits loaded (Decided persists) */
+ const scopeIds=new Set(scopedRows().map(r=>r.id));
+ state.loaded.forEach(id=>{if(scopeIds.has(id)&&statusOf({id})==="Open")state.loaded.delete(id);});
+ filtered.forEach(r=>state.loaded.add(r.id));
+ const liveN=Object.values(state.assessments).filter(a=>a&&a.source==="ai").length;
+ const anyLive=AI.live&&!AIMODE.forceLocal&&CAP>0;
+ state.run={label,days,count:filtered.length,total:sum(filtered,r=>r.amount),at:new Date().toLocaleString("en-PH",{dateStyle:"medium",timeStyle:"short"}),mode:anyLive?"ai":"local",provider:AI.provider,model:AI.model,liveAssessed:anyLive?Math.min(CAP,totalToDo):0};
+ setStage(9,100); await sleep(250);
+ closeModal();state.view="queue";state.qfilter={lane:"investigate",reason:"all",q:""};state.qlimit=25;render();
+}
+function sleep(ms){return new Promise(r=>setTimeout(r,ms));}
+
+function queueRows(vr){
+ const f=state.qfilter;let rows=vr.slice();
+ if(f.lane!=="all")rows=rows.filter(r=>laneOf(r)===f.lane);
+ if(f.reason!=="all")rows=rows.filter(r=>r.reasons.some(x=>x.code===f.reason));
+ if(f.q){const q=f.q.toLowerCase();rows=rows.filter(r=>[r.id,r.customer,r.requester,r.approver,r.invoice,r.nature].some(v=>String(v).toLowerCase().includes(q)));}
+ const k=state.qsort.key,d=state.qsort.dir;
+ rows.sort((a,b)=>{let va=a[k],vb=b[k];if(k==="status"){va=statusOf(a);vb=statusOf(b);}if(typeof va==="string")return va.localeCompare(vb)*d;return ((va-vb)||(b.score-a.score))*d;});
+ return rows;
+}
+function stageTile(L,vr,lc,la,f){const on=f.lane===L.id;return `<button class="lane-tile ${on?"on":""} ${L.stage?"lane-stage":""}" data-action="lane" data-lane="${L.id}" aria-pressed="${on}"><span class="lane-top"><span class="lane-dot" style="background:${L.color}"></span><span class="lane-label">${L.label}</span><span class="lane-count tnum">${lc[L.id]}</span></span><span class="lane-sub">${L.sub}</span><span class="lane-amt tnum">${pesoCompact(la[L.id])}</span></button>`;}
+function laneTabsHTML(vr){
+ const lc=laneCounts(vr).c,la=laneCounts(vr).a;const f=state.qfilter;
+ const three=STAGES;
+ const doneOn=f.lane==="done";
+ const arrow=`<div class="pipe-arrow" aria-hidden="true">${IC.arrowRight||"\u2192"}</div>`;
+ const doneTile=`<button class="lane-tile lane-done ${doneOn?"on":""}" data-action="lane" data-lane="done" aria-pressed="${doneOn}"><span class="lane-top"><span class="lane-dot" style="background:#94a3b8"></span><span class="lane-label">Decided</span><span class="lane-count tnum">${lc.done}</span></span><span class="lane-sub">Cleared, confirmed, or escalated.</span><span class="lane-amt tnum">${pesoCompact(la.done)}</span></button>`;
+ return `<div class="pipe">
+   <div class="pipe-col pipe-lanes"><div class="pipe-cap">Route to a disposition</div><div class="pipe-lane-grid">${three.map(L=>stageTile(L,vr,lc,la,f)).join("")}</div></div>
+   ${arrow}
+   <div class="pipe-col pipe-outbox"><div class="pipe-cap">Outbox</div>${doneTile}</div>
+ </div>`;
+}
+/* shared queue rendering helpers so the two entry points stay in sync */
+function laneNameOf(id){if(id==="done")return "Decided";const s=STAGES.find(x=>x.id===id);return s?s.label:"All";}
+function queueRowHTML(r){
+ const flags=r.reasons.slice(0,3).map(x=>rcHTML(x.code)).join(" ");
+ const more=r.reasons.length>3?`<span class="text-muted2" style="font-size:11px"> +${r.reasons.length-3}</span>`:"";
+ return `<tr data-action="case" data-id="${r.id}" tabindex="0"><td><button class="thb" style="font-weight:600;color:#0f172a" data-action="case" data-id="${r.id}">${esc(r.id)}</button></td><td>${scoreHTML(r)}</td><td class="text-truncate" style="max-width:200px" title="${escA(r.customer)}">${esc(r.customer)}</td><td class="text-muted2 text-truncate" style="max-width:150px">${esc(r.nature)}</td><td class="text-end tnum">${peso(r.amount)}</td><td>${flags}${more}</td><td class="text-muted2">${esc(r.requester)}</td><td>${statusPillHTML(r)}</td></tr>`;
+}
+function queueTableHTML(vr){
+ const all=queueRows(vr);const rows=all.slice(0,state.qlimit);const f=state.qfilter;
+ const reasonsPresent=RC_ORDER.filter(c=>vr.some(r=>r.reasons.some(x=>x.code===c)));
+ const th=(key,label,cls)=>{const on=state.qsort.key===key;return `<th class="${cls||""}" ${on?`aria-sort="${state.qsort.dir<0?"descending":"ascending"}"`:""}><button type="button" class="thb" data-action="qsort" data-key="${key}">${label}${on?`<span aria-hidden="true">${state.qsort.dir<0?"\u25BC":"\u25B2"}</span>`:""}</button></th>`;};
+ const laneName=laneNameOf(f.lane);
+ const intro="Ranked by score. Open a row to see why it was flagged and record a decision.";
+ const filters=`<div class="d-flex align-items-center gap-2 flex-wrap" style="margin-bottom:12px">
+   <div style="position:relative;flex:1;min-width:200px"><span style="position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#94a3b8;display:flex">${IC.search}</span><input class="inp" id="qsearch" type="search" value="${escA(f.q)}" placeholder="Search CM, customer, requester, invoice" aria-label="Search the queue" style="padding-left:32px"></div>
+   <select class="inp" id="qreason" aria-label="Reason code" style="width:auto;max-width:280px"><option value="all" ${f.reason==="all"?"selected":""}>All reasons</option>${reasonsPresent.map(c=>`<option value="${c}" ${f.reason===c?"selected":""}>${esc(RC[c].label)}</option>`).join("")}</select>
+   ${(f.reason!=="all"||f.q)?`<button class="btnx btn-ghost" data-action="qclear" style="padding:6px 10px;font-size:13px">Clear filters</button>`:""}
+   <div class="text-muted2 ms-auto" style="font-size:12px">${all.length.toLocaleString()} in ${esc(laneName)}</div>
+ </div>`;
+ const emptyMsg=f.lane==="stp"?"Nothing waiting to auto-clear":f.lane==="done"?"No decisions recorded yet":"This lane is clear";
+ const body=rows.length?rows.map(r=>queueRowHTML(r)).join("")
+  :`<tr><td colspan="8" class="text-center py-5" style="white-space:normal"><div style="margin:0 auto 8px;color:#10b981;display:flex;justify-content:center">${IC.check}</div><div style="font-size:14px;font-weight:600">${emptyMsg}</div><div class="text-muted2" style="font-size:12px;margin-top:4px">${f.reason!=="all"||f.q?"No credits match the filter in this lane.":"Move to another stage from the tiles above."}</div></td></tr>`;
+ return `<div class="card2"><div class="card2-head" style="margin-bottom:12px"><div><div class="card2-title d-flex align-items-center gap-2">${esc(laneName)} queue</div><div class="text-muted2" style="font-size:12px">${intro}${readOnly()?" Read-only in this role.":""}</div></div></div>
+   ${filters}
+   <div style="overflow-x:auto;border:1px solid #f1f5f9;border-radius:8px"><table class="table table-sm mb-0 qtbl"><caption class="visually-hidden">Credit memo ${esc(laneName)}</caption><thead><tr>${th("id","Credit memo")}${th("score","Score")}${th("customer","Customer")}${th("nature","Nature")}${th("amount","Amount","text-end")}<th>Signals</th>${th("requester","Requester")}${th("status","Status")}</tr></thead><tbody>${body}</tbody></table></div>
+   ${all.length>rows.length?`<div class="text-center mt-3"><button class="btnx btn-soft" data-action="qmore">Show ${Math.min(25,all.length-rows.length)} more</button> <span class="text-muted2 ms-2" style="font-size:12px">${rows.length} of ${all.length}</span></div>`:""}
+ </div>`;
+}
+
+function queueScreenHTML(){
+ const vr=viewRows();const f=state.qfilter;
+ if(!state.run||vr.length===0){
+  return shellHTML("queue","Work queue",role().note,"",`<div class="card2 text-center" style="padding:48px 24px"><div class="ichip ic-indigo" style="background:var(--pm-primary);color:#fff;margin:0 auto 16px;height:48px;width:48px">${IC.sparkles}</div><div style="font-size:18px;font-weight:600">No credits loaded yet</div><div class="text-sec" style="font-size:14px;margin-top:8px;max-width:440px;margin-left:auto;margin-right:auto">Run analysis on a historical range to score the credit memos and route them into Investigate, Review, and Straight-through.</div><div class="mt-4"><button class="btnx btn-brand" data-action="run-analysis">${IC.sparkles} Run analysis</button></div></div>`);
+ }
+ const guard=`<div class="guard mt-3">${IC.info}<span><b>Scores prioritize; you decide.</b> The lane is a suggested disposition from the engine's signals, not a fraud finding. Prior interventions in the data are operational exceptions, not fraud labels.</span></div>`;
+ const actions=can("qa")?`<button class="btnx btn-soft d-none d-sm-inline-flex" data-action="go" data-view="controls">${IC.trend} Rule performance</button>`:"";
+ return shellHTML("queue","Work queue",role().note,actions,`<div id="lane-tabs">${laneTabsHTML(vr)}</div><div id="q-screen" style="margin-top:16px">${queueTableHTML(vr)}</div>${guard}`);
+}
+function rerenderQueue(){const vr=viewRows();const lt=document.getElementById("lane-tabs");if(lt)lt.innerHTML=laneTabsHTML(vr);const qs=document.getElementById("q-screen");if(qs)qs.innerHTML=queueTableHTML(vr);}
+function queueScreenInner(){return queueTableHTML(viewRows());}
+
+/* ---------------- CONTROLS & PREVENTION screen ---------------- */
+function rulePerf(rows){
+ return RC_ORDER.filter(c=>RC[c].type==="rule").map(c=>{
+  const hit=rows.filter(r=>r.reasons.some(x=>x.code===c));
+  const decided=hit.filter(r=>statusOf(r)!=="Open");
+  const confirmed=hit.filter(r=>{const s=statusOf(r);return s==="Confirmed"||s==="Escalated";});
+  const cleared=hit.filter(r=>statusOf(r)==="Cleared");
+  return{code:c,n:hit.length,amount:sum(hit,r=>r.amount),decided:decided.length,confirmed:confirmed.length,cleared:cleared.length,precision:decided.length?confirmed.length/decided.length*100:null};
+ }).filter(x=>x.n>0).sort((a,b)=>b.n-a.n);
+}
+function ruleTuning(rows){
+ /* Reading B, now driven by the DECISION each credit received (no separate assess step):
+    a credit carrying a signal that was Confirmed/Escalated = the signal was a true positive (engine right);
+    Cleared without the authorized flag = a false positive (engine over-fired, counts against accuracy);
+    Cleared WITH the authorized flag = the signal was real but a sanctioned exception (does not count against). */
+ const notes=[];
+ const per=RC_ORDER.map(c=>{
+  let t=0,over=0,auth=0;
+  rows.forEach(r=>{
+   if(!r.reasons.some(x=>x.code===c))return;
+   const d=state.decisions[r.id];if(!d)return; /* only decided credits are labels */
+   if(d.decision==="Confirmed"||d.decision==="Escalated")t++;
+   else if(d.decision==="Cleared"&&d.authorized){auth++;if(d.note&&d.note.trim())notes.push({code:c,cm:r.id,customer:r.customer,note:d.note.trim()});}
+   else if(d.decision==="Cleared")over++;
+  });
+  const assessed=t+over+auth;const acc=assessed?(t+auth)/(t+auth+over)*100:null;
+  return{code:c,type:RC[c].type,assessed,t,over,auth,acc};
+ }).filter(x=>x.assessed>0).sort((a,b)=>b.assessed-a.assessed);
+ return{per,notes,total:sum(per,x=>x.assessed)};
+}
+function controlsScreenHTML(){
+ const vr=viewRows();const st=computeStats(vr);
+ const gateable=vr.filter(hasRule);const gateAmt=sum(gateable,r=>r.amount);
+ const gatePct=vr.length?gateable.length/vr.length*100:0;
+ const rp=rulePerf(vr);
+ const interv=vr.filter(r=>r.intervention);
+ const byCat={};interv.forEach(r=>{byCat[r.intervention]=(byCat[r.intervention]||0)+1;});
+ const catRows=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+ const rs=reasonStats(vr);const rsTotal=sum(rs,s=>s.amount);
+ const drivers=rs.map((s,i)=>({name:RC[s.code].label,code:s.code,amount:s.amount,n:s.n,fill:RC[s.code].type==="rule"?["#e11d48","#f43f5e","#fb7185","#fda4af","#be123c","#9f1239"][i%6]:["#2563eb","#0ea5e9","#6366f1","#14b8a6","#8b5cf6","#0284c7"][i%6]}));
+ const toggle=`<div class="seg-ctl comp-toggle" role="group" aria-label="Legend metric"><button class="${state.compMode==="value"?"on":""}" data-action="comp-mode" data-mode="value" title="Show values">&#8369;</button><button class="${state.compMode==="pct"?"on":""}" data-action="comp-mode" data-mode="pct" title="Show percentages">%</button></div>`;
+ const legendCols=drivers.map(b=>{const pc=rsTotal?b.amount/rsTotal*100:0;return `<div class="col-12 col-sm-6"><button class="legrow" data-action="drill-reason" data-code="${b.code}"><span class="d-flex align-items-center gap-2" style="min-width:0"><span class="dot" style="background:${b.fill}"></span><span class="nm text-truncate">${esc(b.name)}</span><span class="rcode rc-${RC[b.code].type}" style="flex:0 0 auto">${RC[b.code].type}</span></span><span class="metric tnum" style="font-size:14px;color:#0f172a;flex:0 0 auto"><span class="v-val">${b.n} \u00b7 ${pesoCompact(b.amount)}</span><span class="v-pct">${pct(pc)}</span></span></button></div>`;}).join("");
+
+ const kpis=`<div class="row g-3 mb-3">
+   <div class="col-6 col-xl-3">${kpiHTML(IC.file,"indigo","Credit memos scored",st.txns.toLocaleString(),pesoCompact(st.total)+" \u00b7 "+st.customers+" customers")}</div>
+   <div class="col-6 col-xl-3">${kpiHTML(IC.flag,"amber","Investigate + Review",(st.lc.c.investigate+st.lc.c.review).toLocaleString(),st.lc.c.investigate+" investigate \u00b7 "+st.lc.c.review+" review")}</div>
+   <div class="col-6 col-xl-3">${kpiHTML(IC.shieldoff,"amber","Gate-preventable","<span style='color:#be123c'>"+pct(gatePct)+"</span>",gateable.length+" credits \u00b7 "+pesoCompact(gateAmt)+" would stop at eRFCM")}</div>
+   <div class="col-6 col-xl-3">${kpiHTML(IC.check,"emerald","Decisions recorded",(st.dc.Cleared+st.dc.Confirmed+st.dc.Escalated).toLocaleString(),st.dc.Cleared+" cleared \u00b7 "+st.dc.Confirmed+" confirmed \u00b7 "+st.dc.Escalated+" escalated")}</div>
+ </div>`;
+
+ const gateBanner=`<div class="card2" style="border-color:#fecdd3;background:#fff5f6"><div class="d-flex align-items-start gap-3"><span class="ichip" style="background:#fff1f2;color:#be123c;flex:0 0 auto">${IC.shieldoff}</span><div style="flex:1;min-width:0"><div style="font-size:15px;font-weight:600;color:#0f172a">${pct(gatePct)} of scored credits carry a deterministic control hit</div><div class="text-sec" style="font-size:13px;margin-top:4px;line-height:1.5">That is ${gateable.length} credits worth ${peso(gateAmt)} that an embedded-rule gate on the eRFCM portal (roadmap item 10) could auto-reject at submission, before they ever reach this queue. Fraud Master detects them after the fact; the gate would prevent them. This is the prevent-versus-detect split in one number.</div></div></div></div>`;
+
+ const rpCard=`<div class="card2"><div class="card2-head"><div><div class="card2-title">Rule performance</div><div class="text-muted2" style="font-size:12px">How each deterministic control is firing, and how often a decision confirmed it. Precision uses recorded decisions only.</div></div></div>
+   <div style="overflow-x:auto;border:1px solid #f1f5f9;border-radius:8px"><table class="table table-sm mb-0 qtbl"><caption class="visually-hidden">Rule performance</caption><thead><tr><th>Control rule</th><th class="text-end">Fired</th><th class="text-end">Amount</th><th class="text-end">Decided</th><th class="text-end">Confirmed</th><th class="text-end">Cleared</th><th class="text-end">Precision</th></tr></thead><tbody>${rp.length?rp.map(x=>`<tr data-action="drill-reason" data-code="${x.code}" style="cursor:pointer"><td><button class="thb" data-action="drill-reason" data-code="${x.code}" style="font-weight:500">${esc(RC[x.code].label)}</button></td><td class="text-end tnum">${x.n}</td><td class="text-end tnum">${pesoCompact(x.amount)}</td><td class="text-end tnum">${x.decided}</td><td class="text-end tnum" style="color:#be123c;font-weight:600">${x.confirmed}</td><td class="text-end tnum" style="color:#047857">${x.cleared}</td><td class="text-end tnum">${x.precision==null?'<span class="text-muted2">n/a</span>':pct(x.precision)}</td></tr>`).join(""):`<tr><td colspan="7" class="text-center text-muted2 py-4" style="font-size:14px">No control rule fired in this scope.</td></tr>`}</tbody></table></div>
+   <div class="text-muted2 mt-2" style="font-size:12px">Precision reads as: of the credits with this rule that a reviewer has decided, how many were confirmed or escalated rather than cleared. Low precision means the rule over-fires and needs a tuned threshold; high precision with volume means it belongs at the gate.</div>
+ </div>`;
+
+ const intervCard=`<div class="card2"><div class="card2-head"><div class="card2-title">Prior interventions in this data</div><span class="ichip ic-sky">${IC.list}</span></div>
+   <div class="text-muted2" style="font-size:12px;margin-bottom:10px">FS's own exception categories, carried on the mock records. These are operational exceptions, not fraud labels; shown so the two views line up.</div>
+   ${catRows.length?catRows.map(([k,n])=>`<div class="d-flex align-items-center justify-content-between" style="font-size:14px;padding:6px 0;border-bottom:1px solid #f1f5f9"><span class="text-sec">${esc(k)}</span><span class="tnum" style="color:#0f172a">${n}</span></div>`).join(""):`<div class="text-muted2 py-3 text-center" style="font-size:14px">No interventions carried in this scope.</div>`}
+   <div class="text-muted2 mt-2" style="font-size:12px">${interv.length} of ${vr.length} credits carry a prior intervention (${pct(vr.length?interv.length/vr.length*100:0)}).</div>
+ </div>`;
+
+ const driversCard=`<div class="card2 comp-card mode-${state.compMode}"><div class="card2-head"><div><div class="card2-title">Risk drivers</div><div class="text-muted2" style="font-size:12px">Credit amount carrying each reason code. Red = rule, blue = pattern. Open one to see the credits.</div></div>${toggle}</div>
+   ${drivers.length?segHTML(drivers,rsTotal):`<div class="text-muted2 py-3 text-center" style="font-size:14px">No reason codes fired in this window.</div>`}
+   <div style="margin-top:16px" class="row gx-4 gy-2">${legendCols}</div></div>`;
+
+ const rt=ruleTuning(vr);
+ const tuneCard=`<div class="card2"><div class="card2-head"><div><div class="card2-title d-flex align-items-center gap-2"><span class="lane-dot" style="background:#6366f1"></span>Model tuning from decisions</div><div class="text-muted2" style="font-size:12px">Every decision a reviewer records is labeled data. A confirmed or escalated signal means the engine was right; a cleared one means it over-fired (counts against the rule); an authorized exception is a real signal the reviewer cleared as sanctioned (does not count against).</div></div><span class="chip" style="background:#eef2ff;color:#4338ca">${rt.total} labels</span></div>
+   ${rt.per.length?`<div style="overflow-x:auto;border:1px solid #f1f5f9;border-radius:8px"><table class="table table-sm mb-0 qtbl"><caption class="visually-hidden">Model tuning</caption><thead><tr><th>Signal</th><th class="text-end">Assessed</th><th class="text-end">True</th><th class="text-end">Over-fired</th><th class="text-end">Authorized</th><th class="text-end">Accuracy</th></tr></thead><tbody>${rt.per.map(x=>`<tr data-action="drill-reason" data-code="${x.code}" style="cursor:pointer"><td><button class="thb" data-action="drill-reason" data-code="${x.code}" style="font-weight:500">${esc(RC[x.code].label)}</button> <span class="rcode rc-${x.type}">${x.type}</span></td><td class="text-end tnum">${x.assessed}</td><td class="text-end tnum" style="color:#047857;font-weight:600">${x.t}</td><td class="text-end tnum" style="color:#be123c">${x.over}</td><td class="text-end tnum" style="color:#1d4ed8">${x.auth}</td><td class="text-end tnum">${x.acc==null?'<span class="text-muted2">n/a</span>':pct(x.acc)}</td></tr>`).join("")}</tbody></table></div>
+   <div class="text-muted2 mt-2" style="font-size:12px">Accuracy = true plus authorized over all real-match assessments; over-fired lowers it, authorized does not. A rule with low accuracy and volume is a retune candidate; a rule near 100% is safe to push to the eRFCM gate. In production these labels feed model training; here they are captured, not trained.</div>
+   ${rt.notes.length?`<div style="margin-top:12px"><div class="text-sec" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Authorized-exception notes (${rt.notes.length})</div>${rt.notes.slice(0,6).map(n=>`<div style="font-size:13px;padding:6px 0;border-bottom:1px solid #f1f5f9"><span class="rcode rc-${RC[n.code].type}">${esc(n.code)}</span> <b>${esc(n.cm)}</b> <span class="text-muted2">${esc(n.customer)}</span><div class="text-sec" style="margin-top:2px">\u201c${esc(n.note)}\u201d</div></div>`).join("")}<div class="text-muted2 mt-1" style="font-size:12px">These reviewer explanations are the knowledge a future model would learn from: when a rule is right but the case is a legitimate exception.</div></div>`:""}`
+   :`<div class="text-muted2 py-4 text-center" style="font-size:14px">No decisions recorded yet. As reviewers work the lanes, per-rule accuracy builds up here.</div>`}
+ </div>`;
+
+ const trendCard=`<div class="card2"><div class="card2-head"><div class="card2-title">Credits posted vs high-risk over time</div><span class="text-muted2" style="font-size:12px">${rangeLabel()}</span></div><div class="chwrap" style="height:200px"><canvas id="chTrend"></canvas></div></div>`;
+
+ const bandCard=`<div class="card2"><div class="card2-head"><div class="card2-title">Triage lanes</div><span class="ichip ic-amber">${IC.flag}</span></div>
+   <div class="chwrap" style="height:172px;position:relative"><canvas id="chLane"></canvas><div class="cov-center"><div class="cov-pct">${st.lc.c.investigate}</div><div class="cov-sub">investigate</div></div></div>
+   <div style="margin-top:16px" class="d-flex flex-column gap-2">${LANES.map(L=>`<div class="d-flex align-items-center justify-content-between" style="font-size:14px"><span class="d-flex align-items-center gap-2 text-sec"><span class="dot" style="background:${L.color}"></span>${L.label}</span><span class="tnum" style="color:#0f172a">${st.lc.c[L.id]} \u00b7 ${pesoCompact(st.lc.a[L.id])}</span></div>`).join("")}<div class="d-flex align-items-center justify-content-between" style="font-size:14px"><span class="d-flex align-items-center gap-2 text-sec"><span class="dot" style="background:#94a3b8"></span>Decided</span><span class="tnum" style="color:#0f172a">${st.lc.c.done} \u00b7 ${pesoCompact(st.lc.a.done)}</span></div></div></div>`;
+
+ const ranges=[[30,"30D"],[90,"90D"],[180,"6M"],[365,"12M"],["all","All"]];
+ const rangeCtl=`<div class="d-flex align-items-center justify-content-between mb-3"><div style="font-size:14px;color:#64748b">Showing <span style="color:#334155;font-weight:500">${rangeLabel()}</span></div><div class="seg-ctl" role="group" aria-label="Timeframe">${ranges.map(x=>`<button class="${state.range===x[0]?"on":""}" data-action="range" data-range="${x[0]}">${x[1]}</button>`).join("")}</div></div>`;
+
+ const bento=`<div class="row g-3">
+   <div class="col-12 col-xl-8"><div class="d-flex flex-column gap-3">${gateBanner}${rpCard}${tuneCard}${driversCard}${trendCard}</div></div>
+   <div class="col-12 col-xl-4"><div class="d-flex flex-column gap-3">${bandCard}${intervCard}</div></div>
+ </div>`;
+ const actions=`<button class="btnx btn-brand" data-action="go" data-view="queue">${IC.list} Open work queue</button>`;
+ return shellHTML("controls","Controls & prevention",role().note,actions,`${rangeCtl}${kpis}${bento}`);
+}
+function initControlsCharts(){
+ destroyCharts();const vr=viewRows();const st=computeStats(vr);
+ const gran=(state.range!=="all"&&state.range<=120)?"day":"month";
+ const m={};for(const r of vr){const k=gran==="day"?r.date:r.date.slice(0,7);const s=(m[k]||(m[k]={a:0,h:0}));s.a+=r.amount;if(r.band==="high")s.h+=r.amount;}
+ const ot=Object.entries(m).sort();const tl=ot.map(([k])=>gran==="day"?k.slice(5):(k.slice(5)+"/"+k.slice(2,4)));
+ const tr=document.getElementById("chTrend");if(tr)charts.push(area2(tr,tl,ot.map(([,v])=>v.a),ot.map(([,v])=>v.h)));
+ const bc=document.getElementById("chLane");if(bc)charts.push(donut(bc,["Investigate","Review","Straight-through","Decided"],[st.lc.c.investigate,st.lc.c.review,st.lc.c.stp,st.lc.c.done],[LANES[0].color,LANES[1].color,LANES[2].color,"#94a3b8"],(v)=>v+" credits"));
+}
+
+/* ---------------- CUSTOMERS & REQUESTERS screen ---------------- */
+function customersScreenHTML(){
+ const vr=viewRows();
+ const cust=repeatCustomers(vr).filter(c=>c.n>=2).slice(0,10);
+ const clusterCust=new Set(vr.filter(x=>x.reasons.some(y=>y.code==="SPLIT"||y.code==="DUP")).map(x=>x.customer));
+ const reqAgg={};vr.forEach(r=>{const s=(reqAgg[r.requester]||(reqAgg[r.requester]={name:r.requester,n:0,flagged:0,split:0,sod:0}));s.n++;if(r.score>=30)s.flagged+=r.amount;if(r.reasons.some(x=>x.code==="SPLIT"))s.split++;if(r.reasons.some(x=>x.code==="SOD"))s.sod++;});
+ const reqs=Object.values(reqAgg).sort((a,b)=>b.flagged-a.flagged||b.n-a.n).slice(0,10);
+ const custCard=`<div class="card2"><div class="card2-head"><div class="card2-title">Customers with the most flagged credit</div><span class="ichip ic-indigo">${IC.building}</span></div>
+   ${cust.length?cust.map(c=>`<button class="listrow" data-action="customer360" data-name="${escA(c.name)}">${avatarHTML(c.name,28)}<div style="min-width:0;flex:1"><div class="rowtitle d-flex align-items-center gap-2">${esc(c.name)}${clusterCust.has(c.name)?`<span class="chip chip-amber">cluster</span>`:""}</div><div class="rowsub">${c.n} credits \u00b7 ${c.high} high risk</div></div><div class="tnum" style="font-size:14px;font-weight:500;color:#0f172a;flex:0 0 auto">${pesoCompact(c.flagged)}</div></button>`).join(""):`<div class="text-muted2 py-4 text-center" style="font-size:14px">No customer has more than one credit in this scope.</div>`}
+ </div>`;
+ const reqCard=`<div class="card2"><div class="card2-head"><div class="card2-title">Requesters by flagged credit</div><span class="ichip ic-sky">${IC.users}</span></div>
+   <div class="text-muted2" style="font-size:12px;margin-bottom:8px">FS's own risk table is about requester behavior: splitting, manipulation, and SoD. This is that lens.</div>
+   ${reqs.map(r=>`<button class="listrow" data-action="requester360" data-name="${escA(r.name)}">${avatarHTML(r.name,28)}<div style="min-width:0;flex:1"><div class="rowtitle d-flex align-items-center gap-2">${esc(r.name)}${r.split?`<span class="chip chip-amber">splitting</span>`:""}${r.sod?`<span class="chip" style="background:#fff1f2;color:#be123c">SoD</span>`:""}</div><div class="rowsub">${r.n} credits requested</div></div><div class="tnum" style="font-size:14px;font-weight:500;color:#0f172a;flex:0 0 auto">${pesoCompact(r.flagged)}</div></button>`).join("")}
+ </div>`;
+ const ranges=[[30,"30D"],[90,"90D"],[180,"6M"],[365,"12M"],["all","All"]];
+ const rangeCtl=`<div class="d-flex align-items-center justify-content-between mb-3"><div style="font-size:14px;color:#64748b">Showing <span style="color:#334155;font-weight:500">${rangeLabel()}</span></div><div class="seg-ctl" role="group" aria-label="Timeframe">${ranges.map(x=>`<button class="${state.range===x[0]?"on":""}" data-action="range" data-range="${x[0]}">${x[1]}</button>`).join("")}</div></div>`;
+ return shellHTML("customers","Customers & requesters",role().note,"",`${rangeCtl}<div class="row g-3"><div class="col-12 col-lg-6">${custCard}</div><div class="col-12 col-lg-6">${reqCard}</div></div>`);
+}
+function openRequester360(name){
+ const rows=viewRows().filter(r=>r.requester===name).sort((a,b)=>b.score-a.score||b.ms-a.ms);const total=sum(rows,r=>r.amount);
+ const custs=groupCount(rows,"customer");const aprs=groupCount(rows,"approver");const st=computeStats(rows);const sc=splitClusters(rows);const sod=rows.filter(r=>r.reasons.some(x=>x.code==="SOD"));
+ openModal(`<div class="ov-pad"><div class="d-flex align-items-start justify-content-between mb-3"><div><div class="text-muted2" style="font-size:12px">Requester 360</div><h5 style="margin:0;font-weight:600">${esc(name)}</h5><div class="text-muted2" style="font-size:12px;margin-top:4px">${rows.length} credits requested \u00b7 ${peso(total)} \u00b7 ${st.high} high risk \u00b7 ${sc.length} split cluster${sc.length===1?"":"s"}${sod.length?` \u00b7 ${sod.length} SoD`:""}</div></div><button class="btnx btn-ghost" data-action="close-modal" style="padding:4px">${IC.x}</button></div>
+  <div class="row g-3 mb-3"><div class="col-12 col-sm-6"><div style="border:1px solid #f1f5f9;border-radius:8px;padding:12px"><div class="text-sec mb-2" style="font-size:12px;font-weight:500">Customers served</div>${custs.slice(0,6).map(b=>`<div class="d-flex justify-content-between" style="font-size:14px;padding:2px 0"><span class="text-sec text-truncate" style="max-width:70%">${esc(b.name)}</span><span class="text-muted2 tnum">${b.n}</span></div>`).join("")}</div></div>
+   <div class="col-12 col-sm-6"><div style="border:1px solid #f1f5f9;border-radius:8px;padding:12px"><div class="text-sec mb-2" style="font-size:12px;font-weight:500">Approvers used</div>${aprs.slice(0,6).map(b=>`<div class="d-flex justify-content-between" style="font-size:14px;padding:2px 0"><span class="text-sec">${esc(b.name)}</span><span class="text-muted2 tnum">${b.n}</span></div>`).join("")}</div></div></div>
+  ${cmTableHTML(rows)}</div>`,true);
+}
+
+
+/* ---------------- CHAT ---------------- */
+const STARTERS=["Which customers have the most repeated credits in this window?","Show the split clusters that sum over an approval limit","How many high-risk credit memos are still unreviewed, and what do they add up to?"];
+let chat={ctx:null,msgs:[],busy:false,mountId:null,onClose:null};
+let chatWeb=false;
+function chatBaseSystem(ctx,web){
+ const fnd=(ctx.findings||[]).map((f,i)=>(i+1)+". ["+(f.severity||"")+"] "+f.title+": "+f.detail+" ("+(f.metric||"")+")").join("\n");
+ return (web?"You are a Financial Shared Services controls analyst for a large diversified group. You have the authorized internal Credit Memo risk data below AND may use web search for external context (fraud typologies, control frameworks, audit guidance). Use the internal data for company questions and the web only for outside context, and clearly label which statements are internal versus external. Do not put confidential internal specifics, customer names, or employee names into web searches.":"You are a Financial Shared Services controls analyst for a large diversified group, continuing a Credit Memo risk review with an accounting reviewer. Answer only from the authorized data below and never reference anything outside it.")+" "+ANALYST_RULES+" Be concise.\n\nAuthorized scope: "+ctx.dataScope+" | Period: "+ctx.timeLabel+" ("+ctx.count+" credit memos, "+peso(ctx.total)+").\n"+(fnd?"Findings so far:\n"+fnd+"\n\n":"\n")+"Aggregated summary over all authorized rows (amounts in PHP):\n"+JSON.stringify(dataSummary(ctx.rows))+"\nTop-scored credit memos:\n"+JSON.stringify(compactRows(ctx.rows))+filesContext();
+}
+const chatThreads={};
+function chatKey(ctx){return String((ctx&&ctx.dataScope)||"")+"|"+String((ctx&&ctx.timeLabel)||"");}
+function mountChat(mountId,ctx,onClose){var key=chatKey(ctx);if(!chatThreads[key])chatThreads[key]=[];chat={ctx,msgs:chatThreads[key],busy:false,mountId,onClose:onClose||null,web:chatWeb};renderChat();}
+function renderChat(){
+ const el=document.getElementById(chat.mountId);if(!el)return;
+ const body=chat.msgs.length===0
+  ?`<div class="text-sec" style="font-size:14px"><p>Ask about a customer, a requester, a reason code, or the findings. Answers stay within your authorized data and never declare fraud. A few ideas:</p>${STARTERS.map(s=>`<button class="starter" data-action="chat-starter" data-text="${escA(s)}">${esc(s)}</button>`).join("")}</div>`
+  :chat.msgs.map(m=>{var b=`<div class="bub ${m.role==="user"?"bub-u":"bub-a"} ${m.role==="user"?"":"md"}">${m.role==="user"?esc(m.content):mdRender(formatNums(m.content))}</div>`;return m.offerLocal?b+`<div style="margin-top:2px"><button class="btnx btn-soft" data-action="chat-local" style="padding:6px 12px;font-size:13px">Answer from the data instead</button></div>`:b;}).join("");
+ const busy=chat.busy?`<div class="bub bub-a"><span class="spin"></span></div>`:"";
+ el.innerHTML=`<div class="chat"><div class="chat-head">${IC.msg}<span style="font-size:14px;font-weight:600;color:#334155">Ask your data</span><span class="ms-auto text-muted2 text-truncate" style="font-size:12px;max-width:160px">${esc(chat.ctx.dataScope)}</span>${chat.onClose?`<button class="btnx btn-ghost" data-action="close-modal" style="padding:4px">${IC.x}</button>`:""}</div>
+   <div class="chat-body" id="chatBody">${body}${busy}</div>
+   <div class="chat-foot"><div class="d-flex align-items-center justify-content-between mb-2" style="gap:8px;flex-wrap:wrap"><div class="seg-ctl" style="padding:3px"><button class="${chat.web?"":"on"}" data-action="chat-web" data-web="off" style="padding:4px 10px;font-size:12px">Your data</button><button class="${chat.web?"on":""}" data-action="chat-web" data-web="on" style="padding:4px 10px;font-size:12px">Web</button></div><span class="text-muted2" style="font-size:11px;white-space:nowrap">${chat.web?"Web search on":"On-premise only"}</span></div>${chat.web?`<div class="web-disclaimer">${IC.warn}<span>Web mode uses external internet sources. Do not include confidential, personal, customer, or employee data in your questions. Follow your organization's policy on generative AI tools.</span></div>`:""}<div class="d-flex align-items-center gap-2"><input class="inp" id="chatInput" data-chat-input placeholder="${chat.web?"Ask for outside context...":"Ask about this data..."}" /><button class="btnx btn-brand" data-action="chat-send" style="padding:9px" aria-label="Send message">${IC.send}</button></div></div></div>`;
+ const cb=document.getElementById("chatBody");if(cb)cb.scrollTop=cb.scrollHeight;
+}
+function localChatAnswer(q,ctx){
+ const t=String(q).toLowerCase();const rows=ctx.rows||[];const money=n=>peso(Math.round(n));
+ if(/(split|cluster|under the limit|threshold)/.test(t)){const sc=splitClusters(rows).slice(0,5);if(!sc.length)return "No sub-limit cluster sums over its approval limit in this scope.";return "Sub-limit clusters that sum over the approval limit:\n"+sc.map(s=>"- "+s.customer+" by "+s.requester+": "+s.n+" credits ("+s.from+" to "+s.to+"), each under "+money(s.limit)+", total "+money(s.total)+" ("+s.ids.join(", ")+")").join("\n");}
+ if(/(duplicate|similar|same claim|repeat)/.test(t)&&!/customer/.test(t)){const dp=dupPairs(rows).slice(0,6);if(!dp.length)return "No near-duplicate pairs in this scope.";return "Near-duplicate pairs (same customer and nature, amount within 1%, inside 10 days):\n"+dp.map(p=>"- "+p.a.id+" ("+p.a.date+", "+money(p.a.amount)+") and "+p.b.id+" ("+p.b.date+", "+money(p.b.amount)+"): "+p.customer).join("\n");}
+ if(/(customer|distributor|chain)/.test(t)){const rc=repeatCustomers(rows).filter(c=>c.n>=2).slice(0,6);if(!rc.length)return "No customer has more than one credit in this scope.";return "Customers with the most flagged credit:\n"+rc.map(c=>"- "+c.name+": "+c.n+" credits, "+c.high+" high risk, "+money(c.flagged)+" flagged").join("\n");}
+ if(/(unreviewed|open|pending|still|left|remaining|backlog)/.test(t)){const high=rows.filter(r=>r.band==="high");const open=high.filter(r=>statusOf(r)==="Open");return open.length+" of "+high.length+" high-risk credits are still open, totalling "+money(sum(open,r=>r.amount))+". Cleared: "+high.filter(r=>statusOf(r)==="Cleared").length+", confirmed: "+high.filter(r=>statusOf(r)==="Confirmed").length+", escalated: "+high.filter(r=>statusOf(r)==="Escalated").length+".";}
+ if(/(rule|control|paw|internal order|\bio\b|attachment|segregation|sod|approver)/.test(t)){const rs=reasonStats(rows).filter(s=>RC[s.code].type==="rule");if(!rs.length)return "No deterministic control rule fired in this scope.";return "Control hits (rule checks, not AI):\n"+rs.map(s=>"- "+RC[s.code].label+": "+s.n+" credits, "+money(s.amount)).join("\n");}
+ if(/(high.?risk|highest|top|worst|score)/.test(t)){const top=rows.slice().sort((a,b)=>b.score-a.score).slice(0,6);return "Highest-scored credit memos:\n"+top.map(r=>"- "+r.id+" ("+r.score+"): "+r.customer+", "+money(r.amount)+", "+r.reasons.map(x=>RC[x.code].label).slice(0,2).join("; ")).join("\n");}
+ if(/(nature|type of credit|by nature|category)/.test(t)){const bn=groupSum(rows.filter(r=>r.score>=30),"nature").slice(0,6);return "Flagged amount by nature (score 30+):\n"+bn.map(x=>"- "+x.name+": "+money(x.amount)).join("\n");}
+ if(/(how many|total|overall|count)/.test(t)){const st=computeStats(rows);return st.txns+" credit memos in scope ("+money(st.total)+"): "+st.high+" high, "+st.med+" medium, "+(st.txns-st.high-st.med)+" low. High-risk exposure is "+money(st.highAmt)+".";}
+ return null;
+}
+async function chatSend(text){
+ const inp=document.getElementById("chatInput");
+ const q=(text!=null?text:(inp?inp.value:"")||"").trim();
+ if(!q||chat.busy)return;chat.lastQ=q;
+ chat.msgs.push({role:"user",content:q});chat.busy=true;renderChat();
+ try{const {text:reply}=await completeWithFallback(chatBaseSystem(chat.ctx,chat.web),chat.msgs.map(m=>({role:m.role,content:m.content})),chat.web);chat.msgs.push({role:"assistant",content:reply});}
+ catch(e){try{console.warn("model call failed:",(e&&e.message)||e);}catch(_){}var head=(e&&e.noKey)?"No AI key is set up for this demo yet.":"We reached the AI service but it did not return an answer.";var la=localChatAnswer(q,chat.ctx);var body=la?(" Here is what your data shows:\n\n"+la):" You can answer from your data instead \u2014 try: split clusters, near-duplicates, customers with repeated credits, control hits, unreviewed high-risk credits, or flagged amount by nature.";chat.msgs.push({role:"assistant",content:head+body,offerLocal:!la});}
+ chat.busy=false;renderChat();
+}
+
+/* ---------------- REPORT ---------------- */
+function buildReportHTML(a){
+ const date=new Date().toLocaleDateString("en-PH",{year:"numeric",month:"long",day:"numeric"});
+ const sev={high:"#e11d48",medium:"#d97706",low:"#2563eb"};
+ const st=computeStats(a.rows);
+ let b='<h1 style="font-size:28px;font-weight:700;color:#0f172a;margin:0 0 8px">Credit Memo risk review</h1>';
+ b+='<p style="color:#64748b;font-size:13px;margin:0 0 24px">'+esc(a.dataScope)+" &middot; "+esc(a.timeLabel)+" &middot; "+a.count+" credit memos &middot; "+esc(peso(a.total))+" &middot; "+date+(a.model&&a.model!=="computed locally"?" &middot; explained with AI":"")+"</p>";
+ b+='<p style="color:#334155;font-size:14px;line-height:1.6;margin:0 0 16px">This review ranks Credit Memos by a risk score computed from deterministic control rules and cross-transaction pattern analytics. A score prioritizes attention; it does not establish that fraud occurred. Prior interventions are operational exceptions, not fraud labels. Determinations and any resulting actions remain with the Financial Shared Services reviewer, BU Finance, and Internal Audit.</p>';
+ b+='<p style="color:#334155;font-size:14px;line-height:1.6;margin:0 0 24px"><b>Queue position.</b> '+st.high+' high-risk credits ('+esc(peso(st.highAmt))+'), '+st.med+' medium, '+(st.txns-st.high-st.med)+' low. Of the high-risk credits, '+st.reviewed+' have a recorded decision: '+st.dc.Cleared+' cleared, '+st.dc.Confirmed+' confirmed as exceptions, '+st.dc.Escalated+' escalated.</p>';
+ if(!a.findings.length)b+='<p style="color:#64748b;font-size:14px">No findings were flagged for the selected scenarios.</p>';
+ a.findings.forEach((f,i)=>{b+='<h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:24px 0 4px">'+(i+1)+". "+esc(f.title)+"</h2>";b+='<p style="margin:0 0 4px"><span style="font-size:11px;font-weight:600;text-transform:capitalize;color:'+(sev[f.severity]||"#d97706")+'">'+esc(f.severity||"")+' severity</span> <span style="font-size:11px;color:#64748b">'+esc(f.metric||"")+"</span></p>";b+='<p style="color:#334155;font-size:14px;line-height:1.6;margin:0 0 12px">'+esc(f.detail)+"</p>";});
+ const dec=Object.entries(state.decisions).filter(([id])=>a.rows.some(r=>r.id===id));
+ if(dec.length){b+='<h2 style="font-size:16px;font-weight:600;color:#0f172a;margin:24px 0 8px">Decisions recorded in this session</h2><table style="border-collapse:collapse;width:100%;font-size:13px"><thead><tr style="text-align:left;color:#64748b"><th style="padding:4px 8px;border-bottom:1px solid #e2e8f0">Credit memo</th><th style="padding:4px 8px;border-bottom:1px solid #e2e8f0">Decision</th><th style="padding:4px 8px;border-bottom:1px solid #e2e8f0">By</th><th style="padding:4px 8px;border-bottom:1px solid #e2e8f0">Note</th></tr></thead><tbody>'+dec.map(([id,d])=>'<tr><td style="padding:4px 8px;border-bottom:1px solid #f1f5f9">'+esc(id)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f1f5f9">'+esc(d.decision)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f1f5f9">'+esc(d.by)+'</td><td style="padding:4px 8px;border-bottom:1px solid #f1f5f9">'+esc(d.note||"")+'</td></tr>').join("")+'</tbody></table>';}
+ return b;
+}
+function reportHTML(){
+ const a=state.analysis;
+ return `<div class="content"><div class="topbar no-print"><div style="padding:0 24px;height:64px" class="d-flex align-items-center justify-content-between"><button class="btnx btn-ghost" data-action="report-back">${IC.back} Back</button><div class="d-flex gap-2"><button class="btnx btn-soft btn-ai-review" data-action="ai-review">${IC.sparklesColor} Review with AI</button><button class="btnx btn-soft" data-action="print">${IC.print} Print</button><button class="btnx btn-brand" data-action="download">${IC.dl} Download (.doc)</button></div></div></div>
+   <main class="mx-auto" style="padding:32px 24px;max-width:56rem"><div class="no-print text-muted2 mb-3" style="font-size:12px">Edit the report directly, then print or download it. Your changes are kept.</div>
+   <div class="report-page mx-auto" id="reportPage" contenteditable="true" style="max-width:52rem">${buildReportHTML(a)}</div></main></div>`;
+}
+function downloadReport(){
+ try{const inner=document.getElementById("reportPage").innerHTML;
+  const doc='<html><head><meta charset="utf-8"><style>body{font-family:"Plus Jakarta Sans",Arial,sans-serif;max-width:720px;margin:40px auto;padding:0 24px;color:#0f172a}</style></head><body>'+inner+"</body></html>";
+  const url=URL.createObjectURL(new Blob([doc],{type:"application/msword"}));
+  const link=document.createElement("a");link.href=url;link.download="credit-memo-risk-review.doc";document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+ }catch(e){}
+}
+async function aiReview(){
+ const page=document.getElementById("reportPage");
+ const text=(page?page.textContent:"").trim();
+ if(!text){return;}
+ openReview({loading:true});
+ const system="You are a meticulous editor reviewing a Credit Memo risk review that a Financial Shared Services reviewer has edited. Flag issues to fix: unclear or ambiguous wording, grammar and spelling, internal inconsistencies, figures or claims that read as unsupported or overstated, any sentence that states or implies fraud was committed rather than that a pattern warrants review, and tone too strong for evidence that still needs validation. Give a short, specific, bulleted list, each item quoting the phrase it refers to. Do not rewrite the report. If it reads well, say so in one line. Be concise.";
+ const userMsg="Report to review:\n\n"+text.slice(0,8000);
+ try{const r=await completeWithFallback(system,[{role:"user",content:userMsg}]);openReview({text:r.text,model:r.model});}
+ catch(e){openReview({error:(e&&e.message)||"Request failed"});}
+}
+function openReview(st){
+ let body;
+ if(st.loading)body='<div class="text-center py-4"><span class="spin" style="width:28px;height:28px;border-width:3px"></span><div class="text-sec mt-3" style="font-size:14px">Reviewing your report...</div></div>';
+ else if(st.error)body='<div class="text-center py-3"><div style="height:44px;width:44px;border-radius:999px;background:#fff1f2;display:flex;align-items:center;justify-content:center;margin:0 auto;color:#e11d48">'+IC.warn+'</div><div style="font-size:14px;font-weight:600;margin-top:12px">I could not run the review</div><p class="text-sec" style="font-size:14px;margin-top:8px" id="reviewErrMsg">We reached the AI service but it did not return a review.</p><p class="text-muted2" style="font-size:12px">Details: '+esc(st.error)+'</p><div class="d-flex justify-content-center gap-2 mt-3"><button class="btnx btn-ghost" data-action="close-modal">Close</button><button class="btnx btn-brand" data-action="ai-review">'+IC.refresh+' Try again</button></div></div>';
+ else body='<div style="white-space:pre-wrap;font-size:14px;color:#334155;line-height:1.6">'+esc(st.text)+'</div>'+(st.model?'<div class="d-flex align-items-center gap-1 text-muted2 mt-3" style="font-size:12px">'+IC.cpu+' Reviewed with '+esc(st.model)+'</div>':'')+'<div class="d-flex justify-content-between mt-3"><button class="btnx btn-soft" data-action="ai-review">'+IC.refresh+' Review again</button><button class="btnx btn-brand" data-action="close-modal">Done</button></div>';
+ openModal('<div class="ov-pad"><div class="d-flex align-items-center gap-3 mb-3"><span class="ichip ic-indigo" style="background:var(--pm-primary);color:#fff">'+IC.sparkles+'</span><div style="flex:1"><div style="font-size:14px;font-weight:600">AI review</div><div class="text-muted2" style="font-size:12px">Suggestions to double-check your edits</div></div><button class="btnx btn-ghost" data-action="close-modal" style="padding:4px">'+IC.x+'</button></div>'+body+'</div>',true);
+}
+/* ---------------- MODALS ---------------- */
+const modalRoot=document.getElementById("modal-root");
+function openModal(html,wide){modalRoot.innerHTML=`<div class="ov" data-ov><div class="ov-card ${wide?"ov-wide":""}">${html}</div></div>`;}
+function closeModal(){modalRoot.innerHTML="";}
+
+/* add data */
+function humanSize(b){if(b<1024)return b+" B";if(b<1048576)return (b/1024).toFixed(0)+" KB";return (b/1048576).toFixed(1)+" MB";}
+function isTextFile(f){return /\.(csv|tsv|txt|md|json|log|xml|ya?ml)$/i.test(f.name)||/^text\//.test(f.type||"")||f.type==="application/json";}
+function addFiles(list,cb){var arr=Array.prototype.slice.call(list||[]);var pending=arr.length;if(!pending){cb&&cb();return;}
+ arr.forEach(function(f){var rec={id:"f"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:f.name,size:f.size,type:f.type||"",text:""};
+  if(isTextFile(f)&&f.size<=200000){var rd=new FileReader();rd.onload=function(){rec.text=String(rd.result||"").slice(0,4000);state.files.push(rec);if(--pending===0)cb&&cb();};rd.onerror=function(){state.files.push(rec);if(--pending===0)cb&&cb();};rd.readAsText(f);}
+  else{state.files.push(rec);if(--pending===0)cb&&cb();}});}
+function removeFile(id){state.files=state.files.filter(function(f){return f.id!==id;});}
+function fileChip(f,act){return '<span class="filechip"><span class="fi">'+IC.file+'</span><span class="fn">'+esc(f.name)+'</span><span class="fs">'+humanSize(f.size)+'</span><button class="fx" data-action="'+act+'" data-id="'+f.id+'" title="Remove" aria-label="Remove file">'+IC.x+'</button></span>';}
+function filesContext(){if(!state.files.length)return "";var budget=2500;var body=state.files.map(function(f){var line="- "+f.name+" ("+(f.type||"file")+", "+humanSize(f.size)+")";if(f.text&&budget>0){var ex=f.text.slice(0,budget);budget-=ex.length;line+=":\n"+ex;}return line;}).join("\n");return "\nUser-attached files for additional context ("+state.files.length+"):\n"+body+"\nUse these as supplementary context; if a file is not relevant to the question, ignore it.\n";}
+
+/* ---------------- CASE REVIEW (investigation assistance surface) ---------------- */
+let caseState={id:null,decision:null,note:"",authorized:false,ai:null,aiBusy:false,aiErr:null,queue:[]};
+function caseNarrative(r){
+ if(!r.reasons.length)return "No control rule or pattern fired for this credit. It is in the queue only because the window includes every posted credit.";
+ const rules=r.reasons.filter(x=>RC[x.code].type==="rule"),pats=r.reasons.filter(x=>RC[x.code].type==="pattern");
+ let s=r.id+" scored "+r.score+" out of 100. ";
+ if(rules.length)s+="It fails "+rules.length+" control rule"+(rules.length>1?"s":"")+" that should have stopped it at the gate: "+rules.map(x=>x.evidence).join(" ")+" ";
+ if(pats.length)s+="It also matches "+pats.length+" cross-transaction pattern"+(pats.length>1?"s":"")+": "+pats.map(x=>x.evidence).join(" ");
+ return s.trim()+" Check the related credits and the supporting documents before deciding.";
+}
+function relatedRows(r){const ids=new Set(r.related);return state.rows.filter(x=>ids.has(x.id)).sort((a,b)=>a.ms-b.ms);}
+/* Verification checklist, derived from the record. Items the reviewer ticks off before deciding. */
+function caseChecklist(r){
+ const items=[];
+ items.push(["Supporting documents attached and legible",r.attProv>=r.attReq?"ok":"bad",r.attProv+" of "+r.attReq+" mandatory attachments on file"]);
+ if(r.paw)items.push(["Promo approval valid and covers the posting date",(r.date>=r.paw.from&&r.date<=r.paw.to)?"ok":"bad",r.paw.id+" runs "+r.paw.from+" to "+r.paw.to+"; posted "+r.date]);
+ items.push(["Internal Order open",r.io.status!=="Closed"?"ok":"bad",r.io.id+" is "+r.io.status]);
+ items.push(["Amount within the approver's limit",r.amount<=r.limit?"ok":"bad",peso(r.amount)+" vs "+r.approver+" limit "+peso(r.limit)]);
+ items.push(["Requestor and approver are different people",r.requester!==r.approver?"ok":"bad",r.requester===r.approver?r.requester+" is both":"requestor "+r.requester+", approver "+r.approver]);
+ if(r.reasons.some(x=>x.code==="DUP"))items.push(["Not a duplicate of a related credit","bad","matches "+r.related.length+" related credit(s); confirm the invoice reference"]);
+ if(r.reasons.some(x=>x.code==="SPLIT"))items.push(["Not part of a sub-limit cluster","bad","review the cluster under one combined approval"]);
+ return items;
+}
+function openCase(id){
+ const r=state.rows.find(x=>x.id===id);if(!r)return;
+ const d=state.decisions[id];
+ const q=queueRows(viewRows()).map(x=>x.id);
+ caseState={id,decision:d?d.decision:null,note:d?d.note:"",authorized:d?!!d.authorized:false,ai:null,aiBusy:false,aiErr:null,queue:q.includes(id)?q:[id]};
+ renderCase();
+}
+function caseStep(dir){
+ const q=caseState.queue||[];const i=q.indexOf(caseState.id);if(i<0)return;const j=i+dir;if(j<0||j>=q.length)return;
+ const nid=q[j];const d=state.decisions[nid];
+ caseState={id:nid,decision:d?d.decision:null,note:d?d.note:"",authorized:d?!!d.authorized:false,ai:null,aiBusy:false,aiErr:null,queue:q};
+ renderCase();
+}
+function renderCase(){
+ const r=state.rows.find(x=>x.id===caseState.id);if(!r)return;
+ const rel=relatedRows(r);const d=state.decisions[r.id];
+ const ro=readOnly();
+ const reasonRow=(x)=>`<div class="reason"><div style="display:flex;gap:10px;align-items:flex-start;width:100%"><span class="rcode rc-${RC[x.code].type}" style="margin-top:2px">${RC[x.code].type}</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;color:#0f172a">${esc(RC[x.code].label)}</div><div class="text-sec" style="font-size:13px;margin-top:2px;line-height:1.45">${esc(x.evidence)}</div></div><span class="rw tnum">+${RC[x.code].w}</span></div></div>`;
+ const reasons=r.reasons.length?r.reasons.map(reasonRow).join("")
+  :`<div class="text-muted2 py-3" style="font-size:14px">No control rule or pattern fired. Nothing to act on here.</div>`;
+ const ai=caseState.aiBusy?`<div class="d-flex align-items-center gap-2 text-sec mt-2" style="font-size:13px"><span class="spin"></span>Writing the explanation...</div>`
+  :caseState.ai?`<div class="bub bub-a md mt-2" style="max-width:100%">${mdRender(formatNums(caseState.ai.text))}</div><div class="d-flex align-items-center gap-1 text-muted2 mt-1" style="font-size:11px">${IC.cpu} Explained with ${esc(caseState.ai.model)}. The score and reasons above were computed locally; the AI only phrases them.</div>`
+  :caseState.aiErr?`<div class="text-muted2 mt-2" style="font-size:12px">AI explanation unavailable (${esc(caseState.aiErr)}). The plain-language summary above is computed from the reason codes.</div>`:"";
+ const relTbl=rel.length?`<div style="overflow-x:auto;border:1px solid #f1f5f9;border-radius:8px"><table class="table table-sm mb-0 txtbl" style="font-size:13px"><thead><tr class="text-muted2" style="font-size:11px;background:#f8fafc"><th>Credit memo</th><th>Posted</th><th>Nature</th><th class="text-end">Amount</th><th>Requester</th><th>Invoice</th><th>Score</th><th>Status</th></tr></thead><tbody>${rel.map(x=>`<tr><td><button class="thb lnk" data-action="case" data-id="${x.id}" style="text-decoration:none;font-weight:600">${esc(x.id)}</button></td><td class="text-muted2">${x.date}</td><td class="text-muted2">${esc(x.nature)}</td><td class="text-end tnum">${peso(x.amount)}</td><td class="text-muted2">${esc(x.requester)}</td><td class="text-muted2">${esc(x.invoice)}</td><td>${scoreHTML(x)}</td><td>${statusPillHTML(x)}</td></tr>`).join("")}</tbody></table></div><div class="text-muted2 mt-2" style="font-size:12px">Related credits share the pattern that flagged this one (same customer within the window, near-duplicate, or the same sub-limit cluster). Combined: ${peso(sum(rel,x=>x.amount)+r.amount)} across ${rel.length+1} credits.</div>`
+  :`<div class="text-muted2" style="font-size:13px">No related credits. This one was flagged on its own.</div>`;
+ const opts=[["Cleared","Clear as normal","Reviewed the evidence; the credit is consistent with policy and documents."],["Confirmed","Confirm as exception","Something is wrong; route to BU Finance for correction or reversal."],["Escalated","Escalate for investigation","Pattern needs Internal Audit or Risk to look across customers, users, or periods."]];
+ let bottomTitle="Reviewer decision",bottom;
+ if(ro){
+  bottom=`<div class="guard">${IC.info}<span>Your role (${esc(role().label)}) is read-only. You can review evidence and explanations but not record a decision.</span></div>${d?`<div class="text-muted2 mt-2" style="font-size:13px">Recorded decision: <b>${esc(d.decision)}</b> by ${esc(d.by)} on ${esc(d.at)}.${d.authorized?" (authorized exception)":""}${d.note?" Note: "+esc(d.note):""}</div>`:`<div class="text-muted2 mt-2" style="font-size:13px">No decision recorded yet.</div>`}<div class="d-flex justify-content-end mt-3"><button class="btnx btn-soft" data-action="close-modal">Close</button></div>`;
+ }else{
+  const authOn=caseState.authorized;
+  bottom=`<div class="row g-2">${opts.map(o=>`<div class="col-12 col-md-4"><label class="decopt ${caseState.decision===o[0]?"on":""}"><input type="radio" name="decision" value="${o[0]}" ${caseState.decision===o[0]?"checked":""} data-decision><div><div style="font-size:14px;font-weight:600;color:#0f172a">${o[1]}</div><div class="text-muted2" style="font-size:12px;margin-top:2px;line-height:1.4">${o[2]}</div></div></label></div>`).join("")}</div>
+   <label class="auth-check ${authOn?"on":""}" style="display:flex;gap:8px;align-items:flex-start;margin-top:12px;border:1px solid ${authOn?"#93c5fd":"var(--pm-border-subtle)"};background:${authOn?"#eff6ff":"#fff"};border-radius:10px;padding:10px 12px;cursor:pointer"><input type="checkbox" id="authFlag" ${authOn?"checked":""} style="margin-top:2px"><div><div style="font-size:13px;font-weight:600;color:#0f172a">Authorized exception</div><div class="text-muted2" style="font-size:12px;line-height:1.4">The signal is real, but this credit is legitimately approved (e.g. cleared with BU Finance for this activity). Kept as a labeled exception so it does not count against the rule.</div></div></label>
+   <div style="margin-top:12px"><div class="lbl mb-1">Reviewer note ${authOn?`<span style="color:#be123c">(required for an authorized exception)</span>`:`<span class="text-muted2">(optional, shown in review)</span>`}</div><textarea class="inp" id="caseNote" rows="2" placeholder="What you checked and why you decided (kept with the case and shown in the Decided view and report)" style="min-height:56px;line-height:1.5">${esc(caseState.note)}</textarea></div>
+   <div class="d-flex align-items-center justify-content-between mt-3 flex-wrap gap-2"><div class="text-muted2" style="font-size:12px">${d?`Last decision: <b>${esc(d.decision)}</b> by ${esc(d.by)} on ${esc(d.at)}.`:"No decision recorded yet."} Decisions are kept for this session only in the demo.</div><div class="d-flex gap-2"><button class="btnx btn-soft" data-action="case-save" data-next="1" ${caseState.decision?"":"disabled"} title="Save and open the next credit in the queue">Save & next</button><button class="btnx btn-brand" data-action="case-save" ${caseState.decision?"":"disabled"}>Save decision</button></div></div>`;
+ }
+ const decision=bottom;
+ const q=caseState.queue||[];const qi=q.indexOf(r.id);
+ const nav=q.length>1?`<div class="d-flex align-items-center gap-1"><button class="btnx btn-soft" data-action="case-prev" ${qi<=0?"disabled":""} aria-label="Previous credit" style="padding:6px 10px">${IC.back}</button><span class="text-muted2" style="font-size:12px;white-space:nowrap">${qi+1} of ${q.length}</span><button class="btnx btn-soft" data-action="case-next" ${qi>=q.length-1?"disabled":""} aria-label="Next credit" style="padding:6px 10px"><span style="transform:scaleX(-1);display:inline-flex">${IC.back}</span></button></div>`:"";
+ const sc=shownScore(r);const sb=shownBand(r);
+ const a=assessmentOf(r);
+ const SRC_TAG={ai:'<span class="src-tag src-ai">'+IC.sparklesColor+' Live AI assessment</span>',local:'<span class="src-tag src-local">Local fallback assessment</span>'};
+ const srcTag=a?(a.source==="ai"?SRC_TAG.ai:(state.run&&state.run.demoSeed?'<span class="src-tag src-local">Demo assessment \u00b7 no live model</span>':SRC_TAG.local)):"";
+ const LVL={HIGH:{t:"HIGH",c:"#e11d48",b:"#fff1f2"},MEDIUM:{t:"MEDIUM",c:"#b45309",b:"#fffbeb"},LOW:{t:"LOW",c:"#475569",b:"#f1f5f9"}};
+ const confLabel=(c)=>c>=0.66?"High":c>=0.4?"Medium":"Low";
+ // AI Assessment card (the lead)
+ let aiAssessCard="";
+ if(a){
+  const lv=LVL[a.risk_level]||LVL.MEDIUM;
+  const hardBanner=a.hard_stop?`<div class="guard" style="background:#fff1f2;border-color:#fecdd3;margin-bottom:10px">${IC.warn}<span><b>Mandatory control violation.</b> ${esc(a.hard_stop_note||"A hard control forces Investigate.")} The AI assessment is advisory here; it cannot downgrade this case.</span></div>`:"";
+  const sigRows=(a.signals||[]).slice(0,6).map(s=>{const sc2=LVL[s.severity]||LVL.MEDIUM;return `<div class="ai-sig"><div class="d-flex align-items-center gap-2"><span class="ai-sev" style="background:${sc2.b};color:${sc2.c}">${sc2.t}</span><span style="font-size:14px;font-weight:600;color:#0f172a">${esc(s.type.replace(/_/g," "))}</span></div><div class="text-sec" style="font-size:13px;margin-top:3px;line-height:1.45">${esc(s.description)}</div>${(s.supporting_evidence||[]).length?`<div class="text-muted2" style="font-size:12px;margin-top:2px">${s.supporting_evidence.map(e=>esc(e)).join(" \u00b7 ")}</div>`:""}</div>`;}).join("");
+  const focus=(a.reviewer_focus||[]).length?`<div style="margin-top:12px"><div class="text-sec" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px">Recommended review</div>${a.reviewer_focus.map(f=>`<div class="d-flex gap-2" style="font-size:13px;padding:2px 0"><span style="color:#2563eb">\u2192</span><span class="text-sec">${esc(f)}</span></div>`).join("")}</div>`:"";
+  const hist=a.historical_context&&(a.historical_context.normal_behavior||a.historical_context.observed_deviation)?`<div class="ai-hist"><div><div class="ai-hist-l">Normal behavior</div><div class="ai-hist-v">${esc(a.historical_context.normal_behavior||"n/a")}</div></div><div><div class="ai-hist-l">Observed deviation</div><div class="ai-hist-v" style="color:#be123c">${esc(a.historical_context.observed_deviation||"n/a")}</div></div></div>`:"";
+  aiAssessCard=`<div style="border:1px solid ${lv.c}33;border-radius:12px;overflow:hidden">
+    <div style="background:${lv.b};padding:12px 16px" class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+      <div class="d-flex align-items-center gap-3"><div class="ai-risklvl" style="color:${lv.c}">${lv.t} RISK</div>${srcTag}</div>
+      <div class="d-flex align-items-center gap-3"><div class="text-center"><div class="text-muted2" style="font-size:10px;text-transform:uppercase;letter-spacing:.04em">AI risk score</div><div class="tnum" style="font-size:22px;font-weight:700;color:${lv.c};line-height:1">${a.ai_risk_score}</div></div><div class="text-center"><div class="text-muted2" style="font-size:10px;text-transform:uppercase;letter-spacing:.04em">Confidence</div><div style="font-size:14px;font-weight:600;color:#334155">${confLabel(a.confidence)}</div></div></div>
+    </div>
+    <div style="padding:12px 16px">${hardBanner}
+      <div class="text-sec" style="font-size:14px;line-height:1.55">${esc(a.behavioral_assessment&&a.behavioral_assessment.summary||a.reasoning_summary||"")}</div>
+      ${sigRows?`<div style="margin-top:12px"><div class="text-sec" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-bottom:8px">Risk indicators</div><div class="d-flex flex-column gap-2">${sigRows}</div></div>`:""}
+      ${hist}
+      ${a.reasoning_summary&&a.behavioral_assessment&&a.reasoning_summary!==a.behavioral_assessment.summary?`<div class="text-muted2" style="font-size:13px;line-height:1.5;margin-top:10px">${esc(a.reasoning_summary)}</div>`:""}
+      ${focus}
+      <div class="text-muted2" style="font-size:11px;margin-top:12px;display:flex;align-items:center;gap:4px">${IC.info} AI-assessed risk relative to historical behavior. High risk does not mean confirmed fraud. The reviewer makes the final determination.${a._audit?" \u00b7 "+esc(a._audit.provider||"")+(a._audit.model?" ("+esc(a._audit.model)+")":""):""}</div>
+    </div></div>`;
+ }
+ const header=`<div class="d-flex align-items-start justify-content-between gap-3 mb-3"><div style="min-width:0"><div class="d-flex align-items-center gap-2"><div class="text-muted2" style="font-size:12px">Case review</div>${nav}</div><h5 style="margin:6px 0 0;font-weight:600" class="d-flex align-items-center gap-2 flex-wrap">${esc(r.id)} ${statusPillHTML(r)} ${laneChipHTML(r)}</h5><div class="text-muted2" style="font-size:13px;margin-top:4px">${esc(r.customer)} \u00b7 ${esc(r.nature)} \u00b7 ${peso(r.amount)} \u00b7 posted ${r.date}${r.planted?` \u00b7 <span title="Demo only: this credit was planted to exercise the scenario">seeded</span>`:""}</div></div>
+   <div class="d-flex align-items-center gap-3" style="flex:0 0 auto"><div class="text-center"><div class="scorebig" style="color:${BAND_COLOR[sb]}">${sc}</div><div style="margin-top:4px">${bandHTML({band:sb})}</div></div><button class="btnx btn-ghost" data-action="close-modal" style="padding:4px" aria-label="Close">${IC.x}</button></div></div>`;
+ const chk=caseChecklist(r);
+ const checklist=`<div class="text-sec mb-2" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Before you decide</div>${chk.map(c=>`<div class="chkrow"><span class="chk chk-${c[1]}">${c[1]==="ok"?IC.check:IC.warn}</span><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;color:#0f172a">${esc(c[0])}</div><div class="text-muted2" style="font-size:12px">${esc(c[2])}</div></div></div>`).join("")}`;
+ const details=`<dl class="kv" style="margin-top:14px"><dt>Channel</dt><dd>${esc(r.channel)}</dd><dt>Business unit</dt><dd>${esc(r.bu)}</dd><dt>Requester</dt><dd>${esc(r.requester)}</dd><dt>Approver</dt><dd>${esc(r.approver)} <span class="text-muted2">(limit ${pesoCompact(r.limit)})</span></dd><dt>Invoice / DM</dt><dd>${esc(r.invoice)}</dd><dt>Promo approval</dt><dd>${r.paw?esc(r.paw.id)+' <span class="text-muted2">'+r.paw.from+" to "+r.paw.to+"</span>":'<span class="text-muted2">not required for this nature</span>'}</dd><dt>Internal Order</dt><dd>${esc(r.io.id)} <span class="${r.io.status==="Closed"?"pill pill-confirmed":"pill pill-cleared"}" style="padding:0 6px">${r.io.status}</span></dd><dt>Attachments</dt><dd>${r.attProv} of ${r.attReq} mandatory</dd><dt>Posted</dt><dd>${r.date} ${String(r.hour).padStart(2,"0")}:00</dd><dt>Prior intervention</dt><dd>${r.intervention?esc(r.intervention)+' <span class="text-muted2">(operational, not a fraud label)</span>':"none"}</dd></dl>`;
+ const controlCard=r.reasons.filter(x=>RC[x.code].type==="rule").length?`<div style="border:1px solid #f1f5f9;border-radius:12px;padding:12px 16px;margin-top:12px"><div class="text-sec mb-2" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Deterministic control findings <span class="text-muted2" style="font-weight:400;text-transform:none">(evidence given to the AI)</span></div>${r.reasons.filter(x=>RC[x.code].type==="rule").map(x=>`<div class="reason"><div style="display:flex;gap:10px;align-items:flex-start;width:100%"><span class="rcode rc-rule" style="margin-top:2px">${RULE_HARD(x.code)?"hard":"rule"}</span><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500;color:#0f172a">${esc(RC[x.code].label)}</div><div class="text-sec" style="font-size:13px;margin-top:2px;line-height:1.45">${esc(x.evidence)}</div></div></div></div>`).join("")}</div>`:"";
+ const checklistCard=`<div style="border:1px solid #f1f5f9;border-radius:12px;padding:12px 16px;margin-top:12px">${checklist}</div>`;
+ const detailsCard=`<div style="border:1px solid #f1f5f9;border-radius:12px;padding:12px 16px;margin-top:12px"><div class="text-sec mb-1" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Details</div>${details}</div>`;
+ openModal(`<div class="ov-pad">${header}
+  <div class="row g-3"><div class="col-12 col-lg-7">${aiAssessCard||`<div class="text-muted2" style="font-size:14px">No assessment for this credit yet. Run analysis to assess it.</div>`}${controlCard}${checklistCard}</div>
+   <div class="col-12 col-lg-5">${detailsCard}</div></div>
+  <div style="margin-top:16px"><div class="text-sec mb-2" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">Related credits</div>${relTbl}</div>
+  <div style="margin-top:16px;border-top:1px solid #f1f5f9;padding-top:16px"><div class="text-sec mb-2" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.04em">${bottomTitle}</div>${decision}</div>
+  <div class="guard mt-3">${IC.info}<span>Fraud Master prepares the evidence, the LLM assesses the behavior, deterministic hard-stops remain authoritative, and the reviewer determines whether fraud occurred. AI risk is a prioritization aid, not a fraud finding.</span></div>
+ </div>`,true);
+}
+function caseSave(next){
+ const r=state.rows.find(x=>x.id===caseState.id);if(!r||!caseState.decision||readOnly())return;
+ const ta=document.getElementById("caseNote");caseState.note=ta?ta.value.trim():caseState.note;
+ const auth=document.getElementById("authFlag");caseState.authorized=auth?auth.checked:caseState.authorized;
+ if(caseState.authorized&&!caseState.note){const lbl=document.querySelector('.lbl span');if(ta){ta.focus();ta.style.borderColor="#e11d48";}return;}
+ state.decisions[r.id]={decision:caseState.decision,note:caseState.note,authorized:!!caseState.authorized,by:role().label,at:new Date().toLocaleString("en-PH",{dateStyle:"medium",timeStyle:"short"})};
+ if(next){const q=caseState.queue||[];const i=q.indexOf(r.id);const lt=document.getElementById("lane-tabs");if(lt)lt.innerHTML=laneTabsHTML(viewRows());const qs=document.getElementById("q-screen");if(qs)qs.innerHTML=queueTableHTML(viewRows());if(i>=0&&i<q.length-1){caseStep(1);return;}}
+ closeModal();render();
+}
+const laneChipHTML=(r)=>{const l=stageOf(r);if(l==="done")return `<span class="chip chip-slate">Decided</span>`;const S=STAGES.find(x=>x.id===l);return S?`<span class="chip" style="background:${S.color}1a;color:${S.color}">${S.label}</span>`:"";};
+async function caseExplain(){
+ const r=state.rows.find(x=>x.id===caseState.id);if(!r)return;
+ caseState.aiBusy=true;caseState.aiErr=null;renderCase();
+ const rel=relatedRows(r);
+ const system="You are a Financial Shared Services controls analyst for a large diversified group explaining one Credit Memo risk case to an accounting reviewer. "+ANALYST_RULES+" Write 3 to 5 short sentences in plain language: what fired, what it suggests, and the two or three concrete things the reviewer should check next. Do not use headings.";
+ const userMsg="Case:\n"+JSON.stringify({id:r.id,date:r.date,customer:r.customer,nature:r.nature,amount:r.amount,requester:r.requester,approver:r.approver,limit:r.limit,paw:r.paw,io:r.io,attachments:r.attProv+"/"+r.attReq,postedHour:r.hour,score:r.score,band:r.band,reasons:r.reasons.map(x=>({code:x.code,type:RC[x.code].type,label:RC[x.code].label,evidence:x.evidence}))})+"\nRelated credits:\n"+JSON.stringify(rel.map(x=>({id:x.id,date:x.date,amount:x.amount,requester:x.requester,invoice:x.invoice,score:x.score})));
+ try{const res=await completeWithFallback(system,[{role:"user",content:userMsg}]);caseState.ai={text:res.text,model:res.model};}
+ catch(e){caseState.aiErr=(e&&e.noKey)?"no AI key configured":((e&&e.message)||"request failed");}
+ caseState.aiBusy=false;renderCase();
+}
+
+/* ---------------- CUSTOMER 360 + DRILLS ---------------- */
+function cmTableHTML(rows){
+ return `<div style="overflow-x:auto;border:1px solid #f1f5f9;border-radius:8px"><table class="table table-sm mb-0 txtbl" style="font-size:13px"><thead><tr class="text-muted2" style="font-size:11px;background:#f8fafc"><th>Credit memo</th><th>Posted</th><th>Customer</th><th>Nature</th><th class="text-end">Amount</th><th>Requester</th><th>Score</th><th>Reasons</th><th>Status</th></tr></thead><tbody>${rows.map(r=>`<tr><td><button class="thb lnk" data-action="case" data-id="${r.id}" style="text-decoration:none;font-weight:600">${esc(r.id)}</button></td><td class="text-muted2">${r.date}</td><td>${esc(r.customer)}</td><td class="text-muted2">${esc(r.nature)}</td><td class="text-end tnum">${peso(r.amount)}</td><td class="text-muted2">${esc(r.requester)}</td><td>${scoreHTML(r)}</td><td>${r.reasons.slice(0,3).map(x=>rcHTML(x.code)).join(" ")}</td><td>${statusPillHTML(r)}</td></tr>`).join("")}</tbody></table></div>`;
+}
+function openCustomer360(name){
+ const rows=viewRows().filter(r=>r.customer===name).sort((a,b)=>b.score-a.score||b.ms-a.ms);const total=sum(rows,r=>r.amount);
+ const reqs=groupCount(rows,"requester");const nats=groupSum(rows,"nature");const st=computeStats(rows);const sc=splitClusters(rows);const dp=dupPairs(rows);
+ openModal(`<div class="ov-pad"><div class="d-flex align-items-start justify-content-between mb-3"><div><div class="text-muted2" style="font-size:12px">Customer 360</div><h5 style="margin:0;font-weight:600">${esc(name)}</h5><div class="text-muted2" style="font-size:12px;margin-top:4px">${rows.length} credits \u00b7 ${peso(total)} \u00b7 ${st.high} high risk \u00b7 ${sc.length} split cluster${sc.length===1?"":"s"} \u00b7 ${dp.length} near-duplicate pair${dp.length===1?"":"s"}</div></div><button class="btnx btn-ghost" data-action="close-modal" style="padding:4px">${IC.x}</button></div>
+  <div class="row g-3 mb-3"><div class="col-12 col-sm-6"><div style="border:1px solid #f1f5f9;border-radius:8px;padding:12px"><div class="text-sec mb-2" style="font-size:12px;font-weight:500">Requesters</div>${reqs.map(b=>`<div class="d-flex justify-content-between" style="font-size:14px;padding:2px 0"><span class="text-sec">${esc(b.name)}</span><span class="text-muted2 tnum">${b.n} credits</span></div>`).join("")}</div></div>
+   <div class="col-12 col-sm-6"><div style="border:1px solid #f1f5f9;border-radius:8px;padding:12px"><div class="text-sec mb-2" style="font-size:12px;font-weight:500">Credits by nature</div>${nats.map(b=>`<div class="d-flex justify-content-between" style="font-size:14px;padding:2px 0"><span class="text-sec text-truncate" style="max-width:70%">${esc(b.name)}</span><span class="text-muted2 tnum">${pesoCompact(b.amount)}</span></div>`).join("")}</div></div></div>
+  ${cmTableHTML(rows)}</div>`,true);
+}
+function openDrill(entity){
+ const all=viewRows();let rows,title,label;
+ if(entity.type==="reason"){rows=all.filter(r=>r.reasons.some(x=>x.code===entity.name));title=RC[entity.name].label;label=RC[entity.name].type==="rule"?"Control rule":"Pattern";}
+ else{rows=all.filter(r=>r[entity.type]===entity.name);title=entity.name;label={customer:"Customer",requester:"Requester",nature:"Nature",bu:"Business unit"}[entity.type]||entity.type;}
+ rows=rows.slice().sort((a,b)=>b.score-a.score||b.ms-a.ms);const total=sum(rows,r=>r.amount);
+ openModal(`<div class="ov-pad"><div class="d-flex align-items-start justify-content-between mb-3"><div><div class="text-muted2" style="font-size:12px">${esc(label)}</div><h5 style="margin:0;font-weight:600">${esc(title)}</h5><div class="text-muted2" style="font-size:12px;margin-top:4px">${rows.length} credits \u00b7 ${peso(total)} total \u00b7 ${rows.filter(r=>r.band==="high").length} high risk</div></div><button class="btnx btn-ghost" data-action="close-modal" style="padding:4px">${IC.x}</button></div>${cmTableHTML(rows)}</div>`,true);
+}
+function openEntity(type,name){if(type==="cm")openCase(name);else if(type==="customer")openCustomer360(name);else openDrill({type,name});}
+
+/* ---------------- ABOUT (the concept, in one place) ---------------- */
+function openAbout(){
+ const flow=(steps)=>`<div class="d-flex align-items-center gap-1 flex-wrap" style="margin:8px 0 4px">${steps.map((s,i)=>`<span class="flowstep"><span class="fs-box ${s[1]||""}">${esc(s[0])}</span>${i<steps.length-1?`<span class="text-muted2">\u2192</span>`:""}</span>`).join("")}</div>`;
+ openModal(`<div class="ov-pad about"><div class="d-flex align-items-start justify-content-between mb-2"><div><div class="text-muted2" style="font-size:12px">Concept</div><h5 style="margin:0;font-weight:600">Fraud Master: a risk detection and prioritization layer for Credit Memos</h5></div><button class="btnx btn-ghost" data-action="close-modal" style="padding:4px">${IC.x}</button></div>
+  <p>It identifies suspicious patterns in posted Credit Memos, explains why they are suspicious, and helps reviewers focus on the credits that deserve attention. It does not independently declare that fraud occurred.</p>
+  <h6>The problem</h6>
+  <p>FS controls for Credit Memos are strong: budget and promo approval pre-requisites, documentation rules, segregation of duties, weekly AR monitoring. Residual weaknesses remain in FS's own assessment: deduction splitting, soft-copy-only submissions, advance deductions, credits to the wrong IO or with inconsistent mechanics, manual RFCM creation, no duplicate checking, and an awareness gap. Each review looks at one credit at a time, which is exactly where splitting, near-duplicates, and frequency spikes hide.</p>
+  <p>Reference, Jul 2025 to Jun 2026: General Trade received 82,078 credits (\u20b13.50B) and MT National Chains 29,382 (\u20b13.85B). General Trade intervention rate was 6.14% by count (5,037 instances) and 8.74% by amount. Those interventions are IO, details, and attachment exceptions, not fraud labels.</p>
+  <h6>Where it fits</h6>
+  ${flow([["Request (eRFCM)"],["Validation"],["Approval"],["Posting"],["Score & triage","fm"],["Work queue","fm"],["Decision","fm"]])}
+  <p>The entry gate and posting gate <b>prevent</b>: embedded rules for promo approval, IO, mechanics, attachments, and approval limits (roadmap item 10). Fraud Master <b>detects</b>: it scores posted and historical credits in batch and sorts them into three lanes, Investigate, Review, and Straight-through, so a reviewer works the risk down top-first. Reviewers decide; the Controls screen shows what share would have been stopped at the gate.</p>
+  <h6>Three layers</h6>
+  <div class="row g-2 mb-1"><div class="col-12 col-md-4"><div class="layer"><div class="lt">1. Deterministic controls</div><div class="ld">Missing attachment, expired promo approval, closed IO, exceeded authority, requestor = approver, exact duplicate. Rules, not AI. They belong at the gate.</div></div></div><div class="col-12 col-md-4"><div class="layer"><div class="lt">2. Risk and anomaly analytics</div><div class="ld">Similar claims, deduction splitting, abnormal frequency, unusual amounts and timing, behavioral change per customer or requester. Cross-transaction, where one-at-a-time review is weakest.</div></div></div><div class="col-12 col-md-4"><div class="layer"><div class="lt">3. Investigation assistance</div><div class="ld">The three-lane work queue and the case panel: score, reason codes, evidence, a verification checklist, related credits, decision with note, and an optional plain-language explanation. This is the surface a reviewer actually works in.</div></div></div></div>
+  <p class="text-muted2" style="font-size:12px">Principle: do not use AI for a check a reliable rule can express. Aligned to the existing three-layer detection design.</p>
+  <h6>Priority use cases</h6>
+  <ul><li><b>Now (POC 1):</b> duplicate, similar, or repeated claims; deduction splitting; unusual transactional behavior.</li><li><b>Conditional:</b> document anomalies, only if historical attachments are available, linked to their CM, and readable.</li><li><b>Deferred to Phase 2:</b> coordinated or collusive patterns (graph), which need customer master data, user IDs, approval histories, and bank or address data.</li></ul>
+  <h6>POC hypothesis</h6>
+  <p><b>Credit Memo Risk Scoring and Anomaly Detection POC.</b> Can historical Credit Memo data be used to identify and rank transactions with suspicious patterns more effectively than the current review approach? Historical batch extract of 12 to 24 months, read-only, masked; no live ERP integration in POC 1. Success criteria: detection effectiveness against known cases, review reduction, precision of the high-risk band, explainability of every flag, and whether an FS reviewer can act on the output without a data scientist. Humans make the final determination.</p>
+  <h6>What this demo is</h6>
+  <p>Mock credits generated in the browser with planted scenarios. Scoring is deterministic rules plus simple pattern analytics with illustrative weights; a real deployment would tune these thresholds. AI is used only to explain, summarize, and answer questions over the authorized rows. Nothing is stored. Same build family as Spend Master: one HTML file, a serverless proxy, no database.</p>
+  <div class="d-flex justify-content-end mt-3"><button class="btnx btn-brand" data-action="close-modal">Close</button></div></div>`,true);
+}
+
+
+/* ---------------- RULES & TUNING screen (Controls Lead / Admin) ---------------- */
+const RULE_DEF={ /* plain-language definition + parameters for the manager, from the coded logic */
+ SOD:{def:"Requestor is also the approver.",params:"requester == approver"},
+ OVER_LIMIT:{def:"Amount above the approver's delegated limit.",params:"amount > approver limit"},
+ PAW_EXP:{def:"Promo approval expired before posting.",params:"posting date > promo approval end"},
+ IO_CLOSED:{def:"Charged to a closed Internal Order.",params:"IO status == Closed"},
+ PAW_ADV:{def:"Posted before the promo approval activity started.",params:"posting date < promo approval start"},
+ ATT_MISS:{def:"Mandatory attachment missing.",params:"attachments provided < required"},
+ DUP:{def:"Near-duplicate of another credit (side-by-side, not per-transaction).",params:"same customer + nature, amount within 1%, within 10 days"},
+ SPLIT:{def:"Sub-limit cluster that sums over the approval limit.",params:"same customer+requester+approver, each 80-100% of limit, 3+ in 7 days, total over limit"},
+ FREQ:{def:"Unusual credit frequency vs the customer's own pace.",params:">= 2.5x the customer's monthly pace (min 5 in 30 days)"},
+ AMT:{def:"Amount far above the customer's own median.",params:">= 3x the customer's median (4+ priors)"},
+ PERIOD:{def:"Posted at period-end.",params:"within 2 days of month-end"},
+ HOURS:{def:"Posted outside business hours.",params:"before 07:00 or after 19:00"}
+};
+function tuningScreenHTML(){
+ const canEdit=can("tuning")&&!readOnly();
+ const st=STRICTNESS[strictness];
+ /* strictness dial */
+ const dialCard=`<div class="card2"><div class="card2-head"><div><div class="card2-title">System strictness</div><div class="text-muted2" style="font-size:12px">Shifts the routing thresholds only. Hard-stops (SoD, over-limit) always force Investigate regardless of strictness.</div></div></div>
+   <div class="seg-ctl" role="group" aria-label="Strictness" style="margin-bottom:14px">${["lenient","balanced","strict"].map(k=>`<button class="${strictness===k?"on":""}" data-action="strictness" data-k="${k}" ${canEdit?"":"disabled"} style="text-transform:capitalize;padding:8px 18px">${k}</button>`).join("")}</div>
+   <div class="row g-3">
+     <div class="col-6 col-md-3"><div class="tune-tile"><div class="tune-l">Investigate at</div><div class="tune-v" style="color:#e11d48">score \u2265 ${st.inv}</div></div></div>
+     <div class="col-6 col-md-3"><div class="tune-tile"><div class="tune-l">Review at</div><div class="tune-v" style="color:#b45309">score \u2265 ${st.rev}</div></div></div>
+     <div class="col-6 col-md-3"><div class="tune-tile"><div class="tune-l">Straight-through</div><div class="tune-v" style="color:#047857">below ${st.rev}</div></div></div>
+     <div class="col-6 col-md-3"><div class="tune-tile"><div class="tune-l">Effect on this run</div><div class="tune-v">${state.run?laneCounts(viewRows()).c.investigate+" investigate":"run to preview"}</div></div></div>
+   </div>
+   <div class="text-muted2 mt-2" style="font-size:12px">Lenient 80/55 \u00b7 Balanced 70/45 \u00b7 Strict 60/35. Changing strictness re-routes the current run's cases live.</div></div>`;
+ /* rules manager */
+ const ruleRow=(code)=>{
+  const d=RULE_DEF[code]||{def:RC[code].label,params:""};const w=RULE_W(code),en=RULE_ENABLED(code),hard=RULE_HARD(code),isRule=RC[code].type==="rule";
+  return `<tr style="${en?"":"opacity:.5"}"><td><span class="rcode rc-${RC[code].type}">${RC[code].type}</span></td><td style="font-weight:600;color:#0f172a">${esc(RC[code].label)}</td><td class="text-muted2" style="font-size:12px;max-width:280px">${esc(d.params)}</td><td class="text-end"><input class="inp inp-sm" type="number" value="${w}" min="0" max="100" data-action="rule-weight" data-code="${code}" ${canEdit?"":"disabled"} style="width:64px;text-align:center"></td>
+   <td class="text-center">${isRule?`<label class="tsw" title="Force Investigate on hit"><input type="checkbox" ${hard?"checked":""} data-action="rule-hard" data-code="${code}" ${canEdit?"":"disabled"}><span></span></label>`:`<span class="text-muted2" style="font-size:11px">n/a</span>`}</td>
+   <td class="text-center"><label class="tsw"><input type="checkbox" ${en?"checked":""} data-action="rule-enabled" data-code="${code}" ${canEdit?"":"disabled"}><span></span></label></td></tr>`;
+ };
+ const rulesCard=`<div class="card2"><div class="card2-head"><div><div class="card2-title">Rules & patterns</div><div class="text-muted2" style="font-size:12px">Adjust weight, hard-stop, and enablement. Changes re-score the current run live. In-memory for the prototype; production uses a governed config store.</div></div>
+   <div class="d-flex gap-2">${canEdit?`<button class="btnx btn-soft" data-action="rules-import">${IC.plus} Import</button>`:""}<button class="btnx btn-soft" data-action="rules-export">${IC.dl||IC.file} Export</button>${canEdit?`<button class="btnx btn-soft" data-action="rules-reset">${IC.refresh} Reset</button>`:""}</div></div>
+   <div style="overflow-x:auto;border:1px solid #f1f5f9;border-radius:8px"><table class="table table-sm mb-0 qtbl"><caption class="visually-hidden">Rules and patterns</caption><thead><tr><th>Type</th><th>Signal</th><th>Parameters (as coded)</th><th class="text-end">Weight</th><th class="text-center">Hard-stop</th><th class="text-center">Enabled</th></tr></thead>
+   <tbody>${RC_ORDER.filter(c=>RC[c].type==="rule").map(ruleRow).join("")}${RC_ORDER.filter(c=>RC[c].type==="pattern").map(ruleRow).join("")}</tbody></table></div>
+   <div class="text-muted2 mt-2" style="font-size:12px">Weight is illustrative and governed by the BA/vendor. Hard-stop applies to deterministic rules only; a hard-stop rule forces Investigate regardless of the AI assessment or strictness.</div></div>`;
+ /* confirmed-patterns library: curated Confirmed/Escalated cases */
+ const confirmed=state.rows.filter(r=>{const d=state.decisions[r.id];return d&&(d.decision==="Confirmed"||d.decision==="Escalated");});
+ const lib=confirmed.slice().sort((a,b)=>b.ms-a.ms).slice(0,40);
+ const libRows=lib.length?lib.map(r=>{const d=state.decisions[r.id];const a=assessmentOf(r);const sig=(a&&a.signals&&a.signals[0])?a.signals[0].type.replace(/_/g," "):topReason(r);return `<tr><td><button class="thb lnk" data-action="case" data-id="${r.id}" style="font-weight:600;text-decoration:none">${esc(r.id)}</button></td><td>${esc(d.decision)}</td><td class="text-truncate" style="max-width:180px">${esc(r.customer)}</td><td class="text-muted2" style="font-size:12px">${esc(sig)}</td><td class="text-end tnum">${peso(r.amount)}</td><td class="text-muted2" style="max-width:240px"><input class="inp inp-sm" value="${escA(d.note||"")}" placeholder="Add a note" data-action="lib-note" data-id="${r.id}" ${canEdit?"":"disabled"} style="width:100%;font-size:12px"></td><td class="text-center">${canEdit?`<button class="btnx btn-ghost" data-action="lib-remove" data-id="${r.id}" title="Remove from library" style="padding:4px 8px;font-size:12px">Remove</button>`:""}</td></tr>`;}).join("")
+  :`<tr><td colspan="7" class="text-center text-muted2 py-4" style="font-size:14px">No confirmed or escalated cases yet. Cases a reviewer confirms as meaningful appear here.</td></tr>`;
+ const libCard=`<div class="card2"><div class="card2-head"><div><div class="card2-title">Confirmed patterns library</div><div class="text-muted2" style="font-size:12px">Cases reviewers confirmed or escalated as meaningful. Curate with notes; remove false entries. These are NOT auto-promoted into detection rules.</div></div><span class="chip chip-slate">${confirmed.length} case${confirmed.length===1?"":"s"}</span></div>
+   <div style="overflow-x:auto;border:1px solid #f1f5f9;border-radius:8px"><table class="table table-sm mb-0 qtbl"><caption class="visually-hidden">Confirmed patterns library</caption><thead><tr><th>Credit memo</th><th>Decision</th><th>Customer</th><th>Top signal</th><th class="text-end">Amount</th><th>Reviewer note</th><th></th></tr></thead><tbody>${libRows}</tbody></table></div>
+   <div class="text-muted2 mt-2" style="font-size:12px">Promoting a confirmed pattern into a live detection rule is a future, approval-gated step (learning, validation, false-positive review, governance) and is intentionally not automatic.</div></div>`;
+ const roGuard=!canEdit?`<div class="guard mb-3">${IC.info}<span>Your role (${esc(role().label)}) can view rules and tuning but not change them. Editing is limited to Controls Lead and Admin.</span></div>`:"";
+ return shellHTML("tuning","Rules & tuning",role().note,"",`${roGuard}<div class="d-flex flex-column gap-3">${dialCard}${rulesCard}${libCard}</div>`);
+}
+function exportRules(){
+ const cfg={strictness,overrides:ruleOverrides,exported:new Date().toISOString()};
+ try{const blob=new Blob([JSON.stringify(cfg,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="fraud-master-rules.json";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){}
+}
+function importRulesFile(file){
+ const rd=new FileReader();rd.onload=()=>{try{const cfg=JSON.parse(rd.result);if(cfg.strictness&&STRICTNESS[cfg.strictness])strictness=cfg.strictness;if(cfg.overrides&&typeof cfg.overrides==="object"){Object.keys(ruleOverrides).forEach(k=>delete ruleOverrides[k]);Object.assign(ruleOverrides,cfg.overrides);}rescoreAndReroute();render();}catch(e){}};rd.readAsText(file);
+}
+function rescoreAndReroute(){
+ scoreAll(state.rows);
+ /* re-assess loaded open cases locally (keeps live AI assessments untouched unless re-run) */
+ state.rows.forEach(r=>{if(isLoaded(r)&&statusOf(r)==="Open"){const a=assessmentOf(r);if(!a||a.source==="local"){state.assessments[r.id]=finalizeAssessment(localAssessment(r,state.rows),RULE_HARD_ANY(r),"local",null);}else{/* live: re-apply routing under new strictness + hard-stops */const re=finalizeAssessment(Object.assign({},a),RULE_HARD_ANY(r),a.source,a._audit);state.assessments[r.id]=re;}}});
+}
+function RULE_HARD_ANY(r){return r.reasons.some(x=>RULE_HARD(x.code));}
+
+/* ---------------- render router ---------------- */function buildReportContext(){
+ const vr=viewRows();const picked=["dup","split","beh","rules"];
+ const la=localAnalysis(vr,picked);
+ state.analysis={findings:la.findings,model:la.model,timeLabel:rangeLabel(),dataScope:role().note,count:vr.length,total:sum(vr,r=>r.amount),rows:vr,picked,note:"",localReason:"computed from your data"};
+}
+function render(){
+ const app=document.getElementById("app");
+ if(state.view==="overview"){app.innerHTML=overviewScreenHTML();initOverviewCharts();}
+ else if(state.view==="controls"&&can("controls")){app.innerHTML=controlsScreenHTML();initControlsCharts();}
+ else if(state.view==="customers"){app.innerHTML=customersScreenHTML();}
+ else if(state.view==="tuning"&&can("tuning")){app.innerHTML=tuningScreenHTML();}
+ else if(state.view==="report"){if(!state.analysis)buildReportContext();app.innerHTML=`<div class="app">${reportHTML()}</div>`;}
+ else if(state.view==="queue"){app.innerHTML=queueScreenHTML();}
+ else{state.view="overview";app.innerHTML=overviewScreenHTML();initOverviewCharts();}
+}
+
+/* ---------------- events ---------------- */
+document.addEventListener("click",(e)=>{
+ const t=e.target.closest("[data-action]");if(!t)return;
+ const a=t.dataset.action;
+ switch(a){
+  case"go":{const v=t.dataset.view;if(v==="controls"&&!can("controls"))break;if(v==="tuning"&&!can("tuning"))break;state.view=v;state.analysis=null;render();break;}
+  case"strictness":{if(!can("tuning")||readOnly())break;strictness=t.dataset.k;rescoreAndReroute();render();break;}
+  case"rules-export":exportRules();break;
+  case"rules-import":{if(!can("tuning")||readOnly())break;const inp=document.createElement("input");inp.type="file";inp.accept="application/json";inp.onchange=(ev)=>{if(ev.target.files[0])importRulesFile(ev.target.files[0]);};inp.click();break;}
+  case"rules-reset":{if(!can("tuning")||readOnly())break;Object.keys(ruleOverrides).forEach(k=>delete ruleOverrides[k]);strictness="balanced";rescoreAndReroute();render();break;}
+  case"lib-remove":{if(!can("tuning")||readOnly())break;delete state.decisions[t.dataset.id];render();break;}
+  case"lane":{state.qfilter.lane=t.dataset.lane;state.qlimit=25;rerenderQueue();break;}
+  case"range":{const v=t.dataset.range;state.range=(v==="all")?"all":+v;render();break;}
+  case"comp-mode":{const mode=t.dataset.mode;state.compMode=mode;const card=document.querySelector(".comp-card");if(card){card.classList.remove("mode-value","mode-pct");card.classList.add("mode-"+mode);}const grp=t.closest(".comp-toggle");if(grp)grp.querySelectorAll("button").forEach(b=>b.classList.toggle("on",b.dataset.mode===mode));break;}
+  case"ask":{const rows=scopedRows();openModal(`<div style="padding:8px"><div id="askMount"></div></div>`,true);mountChat("askMount",{dataScope:dataScopeLabel(role()),timeLabel:"all available dates",count:rows.length,total:sum(rows,r=>r.amount),rows,findings:[]},closeModal);break;}
+  case"about":openAbout();break;
+  case"close-modal":closeModal();break;
+  case"entity":openEntity(t.dataset.type,t.dataset.name);break;
+  case"customer360":openCustomer360(t.dataset.name);break;
+  case"requester360":openRequester360(t.dataset.name);break;
+  case"drill-reason":openDrill({type:"reason",name:t.dataset.code});break;
+  case"case":openCase(t.dataset.id);break;
+  case"case-save":caseSave(t.dataset.next==="1");break;
+  case"run-analysis":openRun();break;
+  case"dash-range":{const v=t.dataset.range;state.dashRange=(v==="all")?"all":+v;render();break;}
+  case"run-win":runState.customMode=false;runState.win=(t.dataset.win==="all")?"all":+t.dataset.win;renderRun();break;
+  case"run-custom":runState.customMode=true;renderRun();break;
+  case"run-go":{if(runState.customMode){const d=document.getElementById("run-days");runState.custom=d?d.value:runState.custom;if(!(+runState.custom>0))return;}runGo();break;}
+  case"case-explain":caseExplain();break;
+  case"case-prev":caseStep(-1);break;
+  case"case-next":caseStep(1);break;
+  case"qsort":{const k=t.dataset.key;if(state.qsort.key===k)state.qsort.dir=-state.qsort.dir;else state.qsort={key:k,dir:(k==="score"||k==="amount"||k==="date")?-1:1};rerenderQueue();break;}
+  case"qmore":state.qlimit+=25;rerenderQueue();break;
+  case"qclear":state.qfilter={lane:state.qfilter.lane,reason:"all",q:""};state.qlimit=25;rerenderQueue();break;
+  case"to-report":buildReportContext();state.view="report";render();break;
+  case"report-back":state.view=can("controls")?"controls":"queue";render();break;
+  case"print":window.print();break;
+  case"download":downloadReport();break;
+  case"ai-review":aiReview();break;
+  case"chat-send":chatSend();break;
+  case"chat-local":{const lq=chat.lastQ||"";const la=localChatAnswer(lq,chat.ctx)||"From the data I can answer about split clusters, near-duplicates, customers with repeated credits, control hits, unreviewed high-risk credits, or flagged amount by nature.";chat.msgs.push({role:"assistant",content:la});renderChat();break;}
+  case"chat-starter":chatSend(t.dataset.text);break;
+  case"chat-web":chatWeb=(t.dataset.web==="on");chat.web=chatWeb;renderChat();break;
+  case"rmfile":removeFile(t.dataset.id);render();break;
+ }
+});
+document.addEventListener("input",(e)=>{
+ if(e.target&&e.target.id==="caseNote"){caseState.note=e.target.value;e.target.style.borderColor="";}
+ if(e.target&&e.target.id==="qsearch"){state.qfilter.q=e.target.value;state.qlimit=25;clearTimeout(window._qt);window._qt=setTimeout(()=>{const pos=e.target.selectionStart;rerenderQueue();const s=document.getElementById("qsearch");if(s){s.focus();try{s.setSelectionRange(pos,pos);}catch(_){}}},180);}
+});
+document.addEventListener("change",(e)=>{
+ if(e.target&&e.target.id==="wsFileInput"){addFiles(e.target.files,function(){render();});e.target.value="";return;}
+ if(e.target&&e.target.id==="roleSel"){state.roleId=e.target.value;state.view=state.run?role().home:"overview";state.analysis=null;state.range="all";state.qlimit=25;state.qfilter={lane:"investigate",reason:"all",q:""};render();return;}
+ if(e.target&&e.target.id==="qreason"){state.qfilter.reason=e.target.value;state.qlimit=25;rerenderQueue();return;}
+ if(e.target&&e.target.getAttribute){const act=e.target.getAttribute("data-action");
+  if(act==="rule-weight"){const c=e.target.dataset.code;let w=Math.max(0,Math.min(100,+e.target.value||0));(ruleOverrides[c]=ruleOverrides[c]||{}).w=w;rescoreAndReroute();return;}
+  if(act==="rule-hard"){const c=e.target.dataset.code;(ruleOverrides[c]=ruleOverrides[c]||{}).hard=e.target.checked;rescoreAndReroute();render();return;}
+  if(act==="rule-enabled"){const c=e.target.dataset.code;(ruleOverrides[c]=ruleOverrides[c]||{}).enabled=e.target.checked;rescoreAndReroute();render();return;}
+  if(act==="lib-note"){const id=e.target.dataset.id;if(state.decisions[id])state.decisions[id].note=e.target.value;return;}
+ }
+ if(e.target&&e.target.id==="authFlag"){caseState.authorized=e.target.checked;renderCase();return;}
+ if(e.target&&e.target.hasAttribute&&e.target.hasAttribute("data-decision")){caseState.decision=e.target.value;const ta=document.getElementById("caseNote");if(ta)caseState.note=ta.value;
+  document.querySelectorAll(".decopt").forEach(l=>l.classList.toggle("on",l.querySelector("input[data-decision]")&&l.querySelector("input[data-decision]").value===caseState.decision));
+  document.querySelectorAll("[data-action='case-save']").forEach(b=>{b.disabled=false;});
+  return;}
+});
+document.addEventListener("keydown",(e)=>{
+ if(e.key==="Escape"&&modalRoot.innerHTML)closeModal();
+ if(e.key==="Enter"&&e.target&&e.target.hasAttribute&&e.target.hasAttribute("data-chat-input")){chatSend();}
+ if(e.key==="Enter"&&e.target&&e.target.matches&&e.target.matches("tr[data-action='case']")){openCase(e.target.dataset.id);}
+});
+document.addEventListener("mousedown",(e)=>{const ov=e.target.closest(".ov");if(ov&&e.target===ov)closeModal();});
+
+/* ---------------- init ---------------- */
+const segtip=document.createElement("div");segtip.id="segtip";document.body.appendChild(segtip);
+document.addEventListener("mouseover",e=>{const sp=e.target.closest&&e.target.closest(".segpart");if(!sp)return;segtip.innerHTML="<b>"+esc(sp.dataset.name)+"</b><br>"+esc(sp.dataset.val)+" \u00b7 "+esc(sp.dataset.pct);segtip.style.display="block";});
+document.addEventListener("mousemove",e=>{if(segtip.style.display!=="block")return;const sp=e.target.closest&&e.target.closest(".segpart");if(!sp){segtip.style.display="none";return;}segtip.style.left=e.clientX+"px";segtip.style.top=(e.clientY-12)+"px";});
+document.addEventListener("mouseout",e=>{const sp=e.target.closest&&e.target.closest(".segpart");if(sp)segtip.style.display="none";});
+state.view="overview";
+if(location.protocol==="http:"||location.protocol==="https:"){fetch("/api/health").then(function(r){return r.ok?r.json():null;}).then(function(j){if(j&&j.ok){BACKEND=true;AI.live=true;AI.provider=j.provider||"provider";AI.model=j.model||"";}}).catch(function(){});}
+render();
+</script>
+</body>
+</html>
